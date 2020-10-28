@@ -21,7 +21,7 @@ class Users extends Model implements AuthenticatableContract
     const CLIENT = 2;
     const MODERATOR = 3;
 
-    use SoftDeletes;
+//    use SoftDeletes;
 
     protected $dates = ['deleted_at'];
 
@@ -43,9 +43,16 @@ class Users extends Model implements AuthenticatableContract
 
     public static function get_user($id)
     {
+        $id = (int)$id;
         $user = DB::table('users')->where('user_id', '=', $id)->first();
-        $user = isset($user) ? self::find($id) : self::where(['user_id' => $id])->first();
+        $user = isset($user) ? self::where('user_id', $id)->first() : self::find($id);
         return $user;
+    }
+
+    public static function packet($user_id)
+    {
+        $user_packet = UserPacket::where(['user_id' => $user_id])->where(['is_active' => true])->first();
+        return $user_packet ? $user_packet->packet : null;
     }
 
     public static function parentFollowers($parent_id)

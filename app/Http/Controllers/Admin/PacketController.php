@@ -234,32 +234,30 @@ class PacketController extends Controller
             return response()->json($result);
         }
 
-        if (in_array($packet->is_upgrade_packet, [1, 3])) {
+        $is_check = UserPacket::leftJoin('packet', 'packet.packet_id', '=', 'user_packet.packet_id')
+            ->where('user_id', Auth::user()->user_id)
+            ->where('is_active', '=', '0')
+            ->where('upgrade_type', '=', $packet->upgrade_type)
+            ->count();
+
+        if ($is_check > 0) {
+            $result['message'] = 'Вы уже отправили запрос на другой пакет, сначала отмените тот запрос';
+            $result['status'] = false;
+            return response()->json($result);
+        }
+
+        if ($request->packet_id > 2) {
             $is_check = UserPacket::leftJoin('packet', 'packet.packet_id', '=', 'user_packet.packet_id')
-                ->where('user_id', Auth::user()->user_id)
-                ->where('is_active', '=', '0')
+                ->where('user_packet.user_id', Auth::user()->user_id)
+                ->where('user_packet.packet_id', '>=', $request->packet_id)
                 ->where('upgrade_type', '=', $packet->upgrade_type)
+                ->where('user_packet.is_active', 1)
                 ->count();
 
             if ($is_check > 0) {
-                $result['message'] = 'Вы уже отправили запрос на другой пакет, сначала отмените тот запрос';
+                $result['message'] = 'Вы не можете купить этот пакет, так как вы уже приобрели другой пакет';
                 $result['status'] = false;
                 return response()->json($result);
-            }
-
-            if ($request->packet_id > 2) {
-                $is_check = UserPacket::leftJoin('packet', 'packet.packet_id', '=', 'user_packet.packet_id')
-                    ->where('user_packet.user_id', Auth::user()->user_id)
-                    ->where('user_packet.packet_id', '>=', $request->packet_id)
-                    ->where('upgrade_type', '=', $packet->upgrade_type)
-                    ->where('user_packet.is_active', 1)
-                    ->count();
-
-                if ($is_check > 0) {
-                    $result['message'] = 'Вы не можете купить этот пакет, так как вы уже приобрели другой пакет';
-                    $result['status'] = false;
-                    return response()->json($result);
-                }
             }
         }
 
@@ -345,8 +343,6 @@ class PacketController extends Controller
 
     public function acceptInactiveUserPacket(Request $request)
     {
-
-
         $result = [];
         $user_packet_id = $request->packet_id;
         $user_packet = UserPacket::where(['user_packet_id' => $user_packet_id])->first();
@@ -366,7 +362,13 @@ class PacketController extends Controller
             $user_id = $user_packet->user_id;
             $packet_id = $user_packet->packet_id;
             try {
-                $this->implementPacketBonuses($user_packet->user_packet_id);
+                $result = $this->implementPacketBonuses($user_packet->user_packet_id);
+                if(!$result['status']){
+                    return $result = [
+                        'message' => $result['message'],
+                        'status' => false,
+                    ];
+                }
             } catch (\Exception $exception) {
                 $user = Users::get_user($user_id);
                 $packet = Packet::where(['packet_id' => $packet_id])->first();
@@ -383,14 +385,15 @@ class PacketController extends Controller
     public function implementPacketBonuses($userPacketId)
     {
         $userPacket = UserPacket::find($userPacketId);
-        if(!isset($userPacket)){
+        if (!isset($userPacket)) {
             $userPacket = UserPacket::where(['user_packet_id' => $userPacketId])->first();
         }
+
 
         if (!$userPacket) {
             $result['message'] = 'Ошибка';
             $result['status'] = false;
-            return response()->json($result);
+            return $result;
         }
 
         $packet = Packet::where(['packet_id' => $userPacket->packet_id])->first();
@@ -399,9 +402,20 @@ class PacketController extends Controller
         if (!$packet || !$user) {
             $result['message'] = 'Ошибка, пользователь, пригласитель или пакет был не найден!';
             $result['status'] = false;
-            return response()->json($result);
+            return $result;
         }
-        $this->activatePackage($userPacket);
+        $result= $this->activatePackage($userPacket);
+
+        if(!$result['status']){
+            return $result = [
+                'status' => false,
+                'message' => $result['message'],
+            ];
+        }
+        return [
+            'status' => true,
+            'message' => 'success',
+        ];
 
     }
 
@@ -425,7 +439,10 @@ class PacketController extends Controller
             $this->qualificationUp($packet, $user);
         }
 
-        return response()->json($result);
+        return [
+            'status' => true,
+            'message' => 'success',
+        ];
     }
 
     public

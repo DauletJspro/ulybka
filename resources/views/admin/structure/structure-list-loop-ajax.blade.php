@@ -25,7 +25,9 @@
                     {{$user->login}} @if(Auth::user()->user_id == 1)  ({{$user->name}} {{$user->last_name}}
                     ). @endif @include('admin.structure.user_packet_list_loop')
                     <div style="padding-top: 5px; color: rgb(58, 58, 58);">
-                        <p style="color: #009551; margin: 0px">Квалификация: {{$user->user_status_name}}</p>                    
+                        <p style="color: #009551; margin: 0px">Структура: </p>
+                        <span class="badge"
+                              style="{{'#'.($user::packet($user->user_id) ? $user::packet($user->user_id)->packet_css_color : '')}}"> {{$user->user_status_name}}</span>
                     </div>
                 </div>
                 <div class="clear-float"></div>
@@ -44,7 +46,9 @@
                     {{$user->login}}   @if(Auth::user()->user_id == 1) ({{$user->name}} {{$user->last_name}}
                     ) @endif @include('admin.structure.user_packet_list_loop')
                     <div style="padding-top: 5px; color: rgb(58, 58, 58);">
-                        <p style="color: #009551; margin: 0px">Квалификация: {{$user->user_status_name}}</p>                        
+                        <p style="color: #009551; margin: 0px">Структура:</p>
+                        <span class="badge"
+                              style="{{'#'. ($user::packet($user->user_id) ? $user::packet($user->user_id)->packet_css_color : '')}}"> {{$user->user_status_name}}</span>
                     </div>
                 </div>
                 <div class="clear-float"></div>

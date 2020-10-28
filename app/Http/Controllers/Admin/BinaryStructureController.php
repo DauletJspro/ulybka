@@ -173,7 +173,7 @@ class BinaryStructureController extends Controller
                     $this->send_premium($user_id, $packet_id);
                     $this->check_from_check($user_id, $packet_id);
                 }
-                app(ClassicalStructureController::class)->implement_bonuses($user_packet_id, $packet_id + 1);
+                app(ClassicalStructureController::class)->implement_bonuses($user_packet_id, $packet_id + 1, $tree[$first_parent_index]);
                 $this->qualificationUp($tree[$first_parent_index], ($packet_id + 1));
                 $this->to_next_structure($tree[$first_parent_index], ($packet_id + 1), $structure, $user_packet_id);
             } else {
@@ -419,8 +419,8 @@ class BinaryStructureController extends Controller
             $bonus = $structure->to_first_parent;
         }
 
-        $packet_price = round(($packet->packet_price * ($packet->to_binary_structure / 100)), 0);
 
+        $packet_price = round(($packet->packet_price * ($packet->to_binary_structure / 100)), 0);
         $bonus = ($bonus / 100) * $packet_price;
 
         $bonus = round($bonus, 0);

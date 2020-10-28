@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class ClassicalStructureController extends Controller
 {
-    public function implement_bonuses(int $user_packet_id, int $packet_id = null)
+    public function implement_bonuses(int $user_packet_id, int $packet_id = null, $parent_id = null)
     {
         $bonus = 1;
 
@@ -28,34 +28,40 @@ class ClassicalStructureController extends Controller
         }
 
         $user = Users::where(['user_id' => $user_packet->user_id])->first();
+        if(isset($parent_id)){
+            $user = Users::where(['user_id' => $parent_id])->first();
+        }
         $parent = Users::where(['user_id' => $user->recommend_user_id])->first();
         $counter = 1;
         while ($parent) {
-
             if ($counter >= 9 || $parent->user_id == 1) {
                 break;
             }
 
             $money = $parent->user_money + $bonus;
             $parent->user_money = $money;
-            if ($parent->save()) {
-                $this->record_operation($user_packet, $parent, $bonus, $counter, $packet_id);
+            if($parent->save()){
+                $this->record_operation($user_packet, $parent, $bonus, $counter, $packet_id, $user);
             }
+
+
             $parent = Users::where(['user_id' => $parent->recommend_user_id])->first();
             $counter++;
-
         }
+
         if ($counter < 9) {
             $adminUser = Users::where(['user_id' => 1])->first(); // get Admin
             $rest_money = 9 - $counter;
             $adminUser->user_money = $adminUser->user_money + $rest_money;
-            if ($adminUser->save()) {
-                $this->record_operation($user_packet, $adminUser, $rest_money, $counter, $packet_id);
+            if($adminUser->save()){
+                $this->record_operation($user_packet, $adminUser, $rest_money, $counter, $packet_id, $user);
             }
+
+
         }
     }
 
-    public function record_operation($user_packet, $parent, $bonus, $counter, $packet_id = null)
+    public function record_operation($user_packet, $parent, $bonus, $counter, $packet_id = null, $user = null)
     {
         $packet = Packet::where(['packet_id' => $user_packet->packet_id])->first();
         if (isset($packet_id)) {
@@ -64,7 +70,7 @@ class ClassicalStructureController extends Controller
 
         $moneyInKzt = $bonus * Currency::usdToKzt();
         $operation = new UserOperation();
-        $operation->author_id = $user_packet->user_id;
+        $operation->author_id = isset($user)  ? $user->user_id : $user_packet->user_id;
         $operation->recipient_id = $parent->user_id;
         $operation->money = $bonus;
         $operation->operation_id = 1;

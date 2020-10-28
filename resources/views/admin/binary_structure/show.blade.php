@@ -6,6 +6,9 @@ $user = new \App\Models\Users();
 
 $structure = \App\Models\BinaryStructure::where(['id' => $structure_id])->first();
 $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structure);
+
+$packet = \App\Models\Packet::where(['packet_id' => $structure->id])->first();
+$packet_price = $packet->packet_price * \App\Models\Currency::usdToKzt();
 ?>
 @extends('admin.layout.layout')
 
@@ -30,7 +33,8 @@ $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structu
                 <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-xs-12 search_form">
                     <label>Поиск по логину</label>
                     <form method="POST" action="{{route('binary_structure.get_by_user_id')}}">
-                        <div class="col-xl-8 col-lg-8 col-md-11 col-sm-9 col-xs-9 search_field" style="padding: 0 !important;">
+                        <div class="col-xl-8 col-lg-8 col-md-11 col-sm-9 col-xs-9 search_field"
+                             style="padding: 0 !important;">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <input name="login" value="{{ $row->email }}" type="text" class="form-control"
                                    placeholder="Введите">
@@ -75,7 +79,12 @@ $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structu
                                              style="background-color: #f39c12; padding: 5px;">
                                             <button onclick="toPacketShop()"
                                                     style="background-color:#f39c12; border: 0;">
-                                                Купить место <span class="visible-lg visible-xl visible-md hidden-sm hidden-xs">(7000тг)</span>
+                                                @if(!isset($users[0]))
+                                                    Купить место <span
+                                                            class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                @else
+                                                    Куплено
+                                                @endif
                                             </button>
                                         </div>
                                     </div>
@@ -102,7 +111,12 @@ $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structu
                                                      style="background-color: #f39c12; padding: 5px;">
                                                     <button onclick="toPacketShop()"
                                                             style="background-color:#f39c12; border: 0;">
-                                                        Купить место <span class="visible-lg visible-xl visible-md hidden-sm hidden-xs">(7000тг)</span>
+                                                        @if(!isset($users[1]))
+                                                            Купить место <span
+                                                                    class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                        @else
+                                                            Куплено
+                                                        @endif
                                                     </button>
                                                 </div>
                                             </div>
@@ -129,7 +143,12 @@ $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structu
                                                              style="background-color: #f39c12; padding: 5px;">
                                                             <button onclick="toPacketShop()"
                                                                     style="background-color:#f39c12; border: 0;">
-                                                                Купить место <span class="visible-lg visible-xl visible-md hidden-sm hidden-xs">(7000тг)</span>
+                                                                @if(!isset($users[3]))
+                                                                    Купить место <span
+                                                                            class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                                @else
+                                                                    Куплено
+                                                                @endif
                                                             </button>
                                                         </div>
                                                     </div>
@@ -156,7 +175,12 @@ $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structu
                                                              style="background-color: #f39c12; padding: 5px;">
                                                             <button onclick="toPacketShop()"
                                                                     style="background-color:#f39c12; border: 0;">
-                                                                Купить место <span class="visible-lg visible-xl visible-md hidden-sm hidden-xs">(7000тг)</span>
+                                                                @if(!isset($users[4]))
+                                                                    Купить место <span
+                                                                            class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                                @else
+                                                                    Куплено
+                                                                @endif
                                                             </button>
                                                         </div>
                                                     </div>
@@ -185,7 +209,12 @@ $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structu
                                                      style="background-color: #f39c12; padding: 5px;">
                                                     <button onclick="toPacketShop()"
                                                             style="background-color:#f39c12; border: 0;">
-                                                        Купить место <span class="visible-lg visible-xl visible-md hidden-sm hidden-xs">(7000тг)</span>
+                                                        @if(!isset($users[2]))
+                                                            Купить место <span
+                                                                    class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                        @else
+                                                            Куплено
+                                                        @endif
                                                     </button>
                                                 </div>
                                             </div>
@@ -212,7 +241,12 @@ $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structu
                                                              style="background-color: #f39c12; padding: 5px;">
                                                             <button onclick="toPacketShop()"
                                                                     style="background-color:#f39c12; border: 0;">
-                                                                Купить место <span class="visible-lg visible-xl visible-md hidden-sm hidden-xs">(7000тг)</span>
+                                                                @if(!isset($users[5]))
+                                                                    Купить место <span
+                                                                            class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                                @else
+                                                                    Куплено
+                                                                @endif
                                                             </button>
                                                         </div>
                                                     </div>
@@ -239,7 +273,12 @@ $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structu
                                                              style="background-color: #f39c12; padding: 5px;">
                                                             <button onclick="toPacketShop()"
                                                                     style="background-color:#f39c12; border: 0;">
-                                                                Купить место <span class="visible-lg visible-xl visible-md hidden-sm hidden-xs">(7000тг)</span>
+                                                                @if(!isset($users[6]))
+                                                                    Купить место <span
+                                                                            class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                                @else
+                                                                    Куплено
+                                                                @endif
                                                             </button>
                                                         </div>
                                                     </div>
@@ -421,19 +460,22 @@ $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structu
 
 <style>
     @media only screen and (max-width: 400px) {
-        .tree_li{
+        .tree_li {
             padding-left: 0px !important;
         }
-        .thumbnail .caption span{
+
+        .thumbnail .caption span {
             font-size: 1.1rem !important;
         }
-        .thumbnail{
+
+        .thumbnail {
             width: 65px;
         }
 
-        .buy_button button{
+        .buy_button button {
             font-size: 80%;
         }
+
         .button_form {
             margin-top: 10px;
         }
@@ -461,18 +503,15 @@ $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structu
     }
 
 
-
-
     @media only screen and (max-width: 425px) {
-        .thumbnail{
+        .thumbnail {
             width: 60px;
         }
     }
 
 
-
     @media only screen and (max-width: 538px) {
-        .thumbnail{
+        .thumbnail {
             width: 80px;
         }
 
@@ -481,17 +520,19 @@ $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structu
 
     @media only screen and (max-width: 600px) {
 
-        .tree_li{
+        .tree_li {
             padding-left: 60px !important;
         }
-        .thumbnail .caption span{
+
+        .thumbnail .caption span {
             font-size: 1.1rem !important;
         }
-        .thumbnail{
+
+        .thumbnail {
             width: 100px;
         }
 
-        .buy_button button{
+        .buy_button button {
             font-size: 80%;
         }
 
@@ -533,37 +574,40 @@ $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structu
             width: 700px;
         }
     }
+
     @media only screen and (max-width: 452px) {
-        .tree_li{
+        .tree_li {
             padding-left: 0 !important;
         }
-        .thumbnail{
+
+        .thumbnail {
             width: 80px;
         }
 
     }
 
     @media only screen and (max-width: 393px) {
-        .thumbnail{
+        .thumbnail {
             width: 70px;
         }
     }
 
 
-
     /* Small devices (portrait tablets and large phones, 600px and up) */
     @media only screen and (min-width: 600px) {
-        .tree_li{
+        .tree_li {
             padding-left: 60px !important;
         }
-        .thumbnail .caption span{
+
+        .thumbnail .caption span {
             font-size: 1.1rem !important;
         }
-        .thumbnail{
+
+        .thumbnail {
             width: 120px;
         }
 
-        .buy_button button{
+        .buy_button button {
             font-size: 80%;
         }
 
@@ -598,24 +642,27 @@ $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structu
     /* Medium devices (landscape tablets, 768px and up) */
     @media only screen and (min-width: 768px) {
 
-        .tree_li{
+        .tree_li {
             padding-left: 90px !important;
         }
-        .thumbnail .caption span{
+
+        .thumbnail .caption span {
             font-size: 1.1rem !important;
         }
-        .thumbnail{
+
+        .thumbnail {
             width: 100px !important;
         }
 
-        .buy_button button{
+        .buy_button button {
             font-size: 80%;
         }
 
 
-        .thumbnail{
+        .thumbnail {
             width: 120px;
         }
+
         .search_header {
             padding: 0 40px 0 40px;
         }
@@ -654,17 +701,19 @@ $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structu
     /* Large devices (laptops/desktops, 992px and up) */
     @media only screen and (min-width: 992px) {
 
-        .tree_li{
+        .tree_li {
             padding-left: 120px !important;
         }
-        .thumbnail .caption span{
+
+        .thumbnail .caption span {
             font-size: 1.7rem !important;
         }
-        .thumbnail{
+
+        .thumbnail {
             width: 150px !important;
         }
 
-        .buy_button button{
+        .buy_button button {
             font-size: 120%;
         }
 

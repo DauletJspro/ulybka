@@ -76,6 +76,7 @@ class BinaryStructure extends Model
             $right_right_child_idx,
         ];
 
+
         foreach ($idxs as $idx) {
             if (isset($tree[$idx])) {
                 array_push($array, $tree[$idx]);
@@ -86,7 +87,6 @@ class BinaryStructure extends Model
             $user = Users::get_user($user_id);
             $user_array[$key] = $user;
         }
-
 
         return $user_array;
     }

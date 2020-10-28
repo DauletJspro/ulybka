@@ -25,7 +25,6 @@
                                         <th>Пользователь</th>
                                         <th>Спонсор</th>
                                         <th>Email / Телефон</th>
-                                        <th>Объем</th>
                                         <th>Баланс</th>
                                         <th>Подробнее</th>
                                     </tr>
@@ -80,20 +79,6 @@
                                                 <div>
                                                     {{ $val->email }} </br>
                                                     {{ $val->phone }}
-                                                </div>
-                                            </td>
-                                            <td class="arial-font">
-                                                <?php
-                                                $lo_profit = \App\Models\UserPacket::where('is_active',1)
-                                                        ->where('user_id',$val->user_id)
-                                                        ->sum('packet_price');
-                                                ?>
-                                                <div>
-                                                    <span style="font-weight: 900">ЛО: {{ $lo_profit }} $ ({{round($lo_profit * \App\Models\Currency::where('currency_name','тенге')->first()->money,2)}}тг)</span>
-                                                </div>
-                                                <div>
-                                                    <span style="font-weight: 900">ЛКО: {{ $val->left_child_profit }} PV </span>
-                                                    <span style="font-weight: 900">ПКО: {{ $val->right_child_profit }} PV</span>
                                                 </div>
                                             </td>
                                             <td class="arial-font">
