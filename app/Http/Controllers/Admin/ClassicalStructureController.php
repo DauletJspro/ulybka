@@ -48,7 +48,7 @@ class ClassicalStructureController extends Controller
         if ($counter < 9) {
             $adminUser = Users::where(['user_id' => 1])->first(); // get Admin
             $rest_money = 9 - $counter;
-            $adminUser->user_money = $rest_money;
+            $adminUser->user_money = $adminUser->user_money + $rest_money;
             if ($adminUser->save()) {
                 $this->record_operation($user_packet, $adminUser, $rest_money, $counter, $packet_id);
             }
