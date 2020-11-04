@@ -243,11 +243,14 @@ class BinaryStructureController extends Controller
             if (!$exist) {
                 $this->set_child($structure, $user_id, $next_parent_counter + 1);
             } else {
-                // return parent_id and it's free position
+                // return parent_ll
+                //ll
+                //id and it's free position
                 $check = $this->check_free_position($parents[$next_parent_counter], $structure, $parents);
                 if (!$check) {
                     $user_child = $this->all_child_from_user_by_parent_id($parents[$next_parent_counter]);
                     $user_child = $this->correct_child($tree, $user_child);
+
                     foreach ($user_child as $id) {
                         if (in_array($id, $tree)) {
                             $result = $this->check_free_position($id, $structure);
@@ -285,9 +288,8 @@ class BinaryStructureController extends Controller
     public function correct_parents($tree, $parents)
     {
         $array = [];
-        $tree = array_reverse($tree);
-        foreach ($tree as $child_id) {
-            if (in_array($child_id, $parents)) {
+        foreach ($parents as $child_id) {
+            if (in_array($child_id, $tree)) {
                 array_push($array, $child_id);
             }
         }
