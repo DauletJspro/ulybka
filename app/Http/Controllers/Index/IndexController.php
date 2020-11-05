@@ -49,6 +49,10 @@ class IndexController extends Controller
         return view('design_index.index.coming-soon', ['brand' => $brand]);
     }
 
+    public function toLogin(){
+        return redirect(route('login.show'));
+    }
+
     public function index(Request $request)
     {
         if(version_compare(PHP_VERSION, '7.2.0', '>=')) {

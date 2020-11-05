@@ -318,7 +318,7 @@ Route::group([
     'middleware' => 'web',
     'namespace' => 'Index',
 ], function () {
-    Route::get('/', 'IndexController@opportunity');
+    Route::get('/', 'IndexController@toLogin');
     Route::get('gallery', 'IndexController@gallery')->name('gallery.show');
     Route::get('gallery-detail/{id}', 'IndexController@galleryDetail')->name('gallery-detail.show');
     Route::get('city', 'IndexController@getCityListByCountry');
