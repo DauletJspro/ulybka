@@ -12,15 +12,15 @@ class UserStatus extends Model
     protected $table = 'user_status';
     protected $primaryKey = 'user_status_id';
 
-    const SILVER = 1;
-    const GOLD = 2;
-    const PLATINUM = 3;
-    const RUBIN = 4;
-    const SAPPHIRE = 5;
-    const EMERALD = 6;
-    const DIAMOND = 7;
+
+    const FIRST_TABLE = 1;
+    const SECOND_TABLE = 2;
+    const THIRD_TABLE = 3;
+    const FOURTH_TABLE = 4;
+    const FIFTH_TABLE = 5;
 
     use SoftDeletes;
+
     protected $dates = ['deleted_at'];
 
 

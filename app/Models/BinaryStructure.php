@@ -20,6 +20,10 @@ class BinaryStructure extends Model
     const SIXTH_STRUCTURE = 6;
     const SEVENTH_STRUCTURE = 7;
 
+    const VIEW_TYPE_SIMPLE = 1;
+    const VIEW_TYPE_ONLY_TRIPLE = 2;
+
+
     public static function get_structure_by_packet_id($id)
     {
         $structure_id = null;
