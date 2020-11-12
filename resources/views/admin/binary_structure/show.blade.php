@@ -5,10 +5,19 @@
 $user = new \App\Models\Users();
 
 $structure = \App\Models\BinaryStructure::where(['id' => $structure_id])->first();
-$users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structure);
+$users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structure, $number);
 
 $packet = \App\Models\Packet::where(['packet_id' => $structure->id])->first();
 $packet_price = $packet->packet_price * \App\Models\Currency::usdToKzt();
+$is_show_last_4 = true;
+
+//if ($structure_id == 2) {
+//    $is_show_last_4 = false;
+//}
+//if ($structure_id == 4) {
+//    $is_show_last_4 = false;
+//}
+
 ?>
 @extends('admin.layout.layout')
 
@@ -18,16 +27,27 @@ $packet_price = $packet->packet_price * \App\Models\Currency::usdToKzt();
         <div class="header search_header col-12"
              style="background-color: #fffaf1;height:auto;border-radius: 4px; border: 1px solid lightgrey;">
             <div class="box-body row ">
-                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12">
                     <label>Структура</label>
                     <select name="structure_id" id="structure_id" class="form-control">
-                        <option {{$structure_id == 1 ? 'selected' : ''}} value="1">Серебряный стол</option>
-                        <option {{$structure_id == 2 ? 'selected' : ''}} value="2">Золотой стол</option>
-                        <option {{$structure_id == 3 ? 'selected' : ''}} value="3">Платиновый стол</option>
-                        <option {{$structure_id == 4 ? 'selected' : ''}} value="4">Рубиновый стол</option>
-                        <option {{$structure_id == 5 ? 'selected' : ''}} value="5">Cапфировый стол</option>
-                        <option {{$structure_id == 6 ? 'selected' : ''}} value="6">Изумруд стол</option>
-                        <option {{$structure_id == 7 ? 'selected' : ''}} value="7">Бриллиантовый стол</option>
+                        <option {{$structure_id == 1 ? 'selected' : ''}} value="1">Первый стол</option>
+                        <option {{$structure_id == 2 ? 'selected' : ''}} value="2">Второй стол</option>
+                        <option {{$structure_id == 3 ? 'selected' : ''}} value="3">Третий стол</option>
+                        <option {{$structure_id == 4 ? 'selected' : ''}} value="4">Четвертый стол</option>
+                        <option {{$structure_id == 5 ? 'selected' : ''}} value="5">Пятый стол</option>
+                    </select>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2">
+                    <label>Номер стола</label>
+                    <select name="number_id" id="number_id" class="form-control">
+                        <option {{$number == 1 ? 'selected' : ''}} value="1">1</option>
+                        <option {{$number == 2 ? 'selected' : ''}} value="2">2</option>
+                        <option {{$number == 3 ? 'selected' : ''}} value="3">3</option>
+                        <option {{$number == 4 ? 'selected' : ''}} value="4">4</option>
+                        <option {{$number == 5 ? 'selected' : ''}} value="5">5</option>
+                        <option {{$number == 6 ? 'selected' : ''}} value="5">6</option>
+                        <option {{$number == 7 ? 'selected' : ''}} value="5">7</option>
+                        <option {{$number == 8 ? 'selected' : ''}} value="5">8</option>
                     </select>
                 </div>
                 <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-xs-12 search_form">
@@ -39,6 +59,7 @@ $packet_price = $packet->packet_price * \App\Models\Currency::usdToKzt();
                             <input name="login" value="{{ $row->email }}" type="text" class="form-control"
                                    placeholder="Введите">
                             <input type="hidden" name="structure_id" value="{{$structure_id ?: null}}">
+                            <input type="hidden" name="number" value="{{$number ?: null}}">
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-1 col-sm-1 col-xs-1  search_button">
                             <button class="btn btn-success">Найти</button>
@@ -59,7 +80,10 @@ $packet_price = $packet->packet_price * \App\Models\Currency::usdToKzt();
                 </div>
             </div>
         </div>
-        <h1 style="float: left;padding-left: 2rem;padding-top: 1rem;">{{$structure->name_ru}}</h1>
+        <h1 style="float: left;padding-left: 2rem;padding-top: 1rem;">
+            {{$structure->name_ru}}. <span style="font-size: 80%;">Номер стола: {{$number}}</span>
+        </h1>
+        {{--        <h3 style="float:left; padding-top: 6rem;padding-left: -3rem;"></h3>--}}
         <div class="col-12 tree" style="margin-top:100px;height: auto;">
             <ul>
                 <li class="tree_li" style="padding-left: 120px;">
@@ -126,70 +150,72 @@ $packet_price = $packet->packet_price * \App\Models\Currency::usdToKzt();
                                 </div>
                             </a>
                             <ul>
-                                <li>
-                                    <a href="#">
-                                        <div class="row" id="first_line">
-                                            <div class="col-md-12 text-center">
-                                                <div class="thumbnail">
-                                                    <img src="{{asset(isset($users[3]) && $users[3]->avatar ? $users[3]->avatar : '/media/default.png')}}"
-                                                         alt="">
-                                                    <div class="caption text-center">
-                                                        <br>
-                                                        <span>{{isset($users[3]) ? $users[3]->login: 'Не указано' }}</span>
-                                                        <br>
-                                                    </div>
-                                                    <div class="text-center">
-                                                        <div class="col-md-12 buy_button"
-                                                             style="background-color: #f39c12; padding: 5px;">
-                                                            <button onclick="toPacketShop()"
-                                                                    style="background-color:#f39c12; border: 0;">
-                                                                @if(!isset($users[3]))
-                                                                    Купить место <span
-                                                                            class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
-                                                                @else
-                                                                    Куплено
-                                                                @endif
-                                                            </button>
+                                @if($is_show_last_4)
+                                    <li>
+                                        <a href="#">
+                                            <div class="row" id="first_line">
+                                                <div class="col-md-12 text-center">
+                                                    <div class="thumbnail">
+                                                        <img src="{{asset(isset($users[3]) && $users[3]->avatar ? $users[3]->avatar : '/media/default.png')}}"
+                                                             alt="">
+                                                        <div class="caption text-center">
+                                                            <br>
+                                                            <span>{{isset($users[3]) ? $users[3]->login: 'Не указано' }}</span>
+                                                            <br>
                                                         </div>
-                                                    </div>
+                                                        <div class="text-center">
+                                                            <div class="col-md-12 buy_button"
+                                                                 style="background-color: #f39c12; padding: 5px;">
+                                                                <button onclick="toPacketShop()"
+                                                                        style="background-color:#f39c12; border: 0;">
+                                                                    @if(!isset($users[3]))
+                                                                        Купить место <span
+                                                                                class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                                    @else
+                                                                        Куплено
+                                                                    @endif
+                                                                </button>
+                                                            </div>
+                                                        </div>
 
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="row" id="first_line">
-                                            <div class="col-md-12 text-center">
-                                                <div class="thumbnail">
-                                                    <img src="{{asset(isset($users[4]) && $users[4]->avatar ? $users[4]->avatar : '/media/default.png')}}"
-                                                         alt="">
-                                                    <div class="caption text-center">
-                                                        <br>
-                                                        <span>{{isset($users[4]) ? $users[4]->login: 'Не указано' }}</span>
-                                                        <br>
-                                                    </div>
-                                                    <div class="text-center">
-                                                        <div class="col-md-12 buy_button"
-                                                             style="background-color: #f39c12; padding: 5px;">
-                                                            <button onclick="toPacketShop()"
-                                                                    style="background-color:#f39c12; border: 0;">
-                                                                @if(!isset($users[4]))
-                                                                    Купить место <span
-                                                                            class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
-                                                                @else
-                                                                    Куплено
-                                                                @endif
-                                                            </button>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <div class="row" id="first_line">
+                                                <div class="col-md-12 text-center">
+                                                    <div class="thumbnail">
+                                                        <img src="{{asset(isset($users[4]) && $users[4]->avatar ? $users[4]->avatar : '/media/default.png')}}"
+                                                             alt="">
+                                                        <div class="caption text-center">
+                                                            <br>
+                                                            <span>{{isset($users[4]) ? $users[4]->login: 'Не указано' }}</span>
+                                                            <br>
                                                         </div>
-                                                    </div>
+                                                        <div class="text-center">
+                                                            <div class="col-md-12 buy_button"
+                                                                 style="background-color: #f39c12; padding: 5px;">
+                                                                <button onclick="toPacketShop()"
+                                                                        style="background-color:#f39c12; border: 0;">
+                                                                    @if(!isset($users[4]))
+                                                                        Купить место <span
+                                                                                class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                                    @else
+                                                                        Куплено
+                                                                    @endif
+                                                                </button>
+                                                            </div>
+                                                        </div>
 
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                </li>
+                                        </a>
+                                    </li>
+                                @endif
                             </ul>
                         </li>
                         <li>
@@ -224,76 +250,79 @@ $packet_price = $packet->packet_price * \App\Models\Currency::usdToKzt();
                                 </div>
                             </a>
                             <ul>
-                                <li>
-                                    <a href="#">
-                                        <div class="row" id="first_line">
-                                            <div class="col-md-12 text-center">
-                                                <div class="thumbnail">
-                                                    <img src="{{asset(isset($users[5]) && $users[5]->avatar ? $users[5]->avatar : '/media/default.png')}}"
-                                                         alt="">
-                                                    <div class="caption text-center">
-                                                        <br>
-                                                        <span>{{isset($users[5]) ? $users[5]->login: 'Не указано' }}</span>
-                                                        <br>
-                                                    </div>
-                                                    <div class="text-center">
-                                                        <div class="col-md-12 buy_button"
-                                                             style="background-color: #f39c12; padding: 5px;">
-                                                            <button onclick="toPacketShop()"
-                                                                    style="background-color:#f39c12; border: 0;">
-                                                                @if(!isset($users[5]))
-                                                                    Купить место <span
-                                                                            class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
-                                                                @else
-                                                                    Куплено
-                                                                @endif
-                                                            </button>
+                                @if($is_show_last_4)
+                                    <li>
+                                        <a href="#">
+                                            <div class="row" id="first_line">
+                                                <div class="col-md-12 text-center">
+                                                    <div class="thumbnail">
+                                                        <img src="{{asset(isset($users[5]) && $users[5]->avatar ? $users[5]->avatar : '/media/default.png')}}"
+                                                             alt="">
+                                                        <div class="caption text-center">
+                                                            <br>
+                                                            <span>{{isset($users[5]) ? $users[5]->login: 'Не указано' }}</span>
+                                                            <br>
                                                         </div>
-                                                    </div>
+                                                        <div class="text-center">
+                                                            <div class="col-md-12 buy_button"
+                                                                 style="background-color: #f39c12; padding: 5px;">
+                                                                <button onclick="toPacketShop()"
+                                                                        style="background-color:#f39c12; border: 0;">
+                                                                    @if(!isset($users[5]))
+                                                                        Купить место <span
+                                                                                class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                                    @else
+                                                                        Куплено
+                                                                    @endif
+                                                                </button>
+                                                            </div>
+                                                        </div>
 
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="row" id="first_line">
-                                            <div class="col-md-12 text-center">
-                                                <div class="thumbnail">
-                                                    <img src="{{asset(isset($users[6]) && $users[6]->avatar ? $users[6]->avatar : '/media/default.png')}}"
-                                                         alt="">
-                                                    <div class="caption text-center">
-                                                        <br>
-                                                        <span>{{isset($users[6]) ? $users[6]->login: 'Не указано' }}</span>
-                                                        <br>
-                                                    </div>
-                                                    <div class="text-center">
-                                                        <div class="col-md-12 buy_button"
-                                                             style="background-color: #f39c12; padding: 5px;">
-                                                            <button onclick="toPacketShop()"
-                                                                    style="background-color:#f39c12; border: 0;">
-                                                                @if(!isset($users[6]))
-                                                                    Купить место <span
-                                                                            class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
-                                                                @else
-                                                                    Куплено
-                                                                @endif
-                                                            </button>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <div class="row" id="first_line">
+                                                <div class="col-md-12 text-center">
+                                                    <div class="thumbnail">
+                                                        <img src="{{asset(isset($users[6]) && $users[6]->avatar ? $users[6]->avatar : '/media/default.png')}}"
+                                                             alt="">
+                                                        <div class="caption text-center">
+                                                            <br>
+                                                            <span>{{isset($users[6]) ? $users[6]->login: 'Не указано' }}</span>
+                                                            <br>
                                                         </div>
-                                                    </div>
+                                                        <div class="text-center">
+                                                            <div class="col-md-12 buy_button"
+                                                                 style="background-color: #f39c12; padding: 5px;">
+                                                                <button onclick="toPacketShop()"
+                                                                        style="background-color:#f39c12; border: 0;">
+                                                                    @if(!isset($users[6]))
+                                                                        Купить место <span
+                                                                                class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                                    @else
+                                                                        Куплено
+                                                                    @endif
+                                                                </button>
+                                                            </div>
+                                                        </div>
 
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                </li>
+                                        </a>
+                                    </li>
+                                @endif
                             </ul>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
+
     </div>
 
 @endsection
@@ -769,7 +798,10 @@ $packet_price = $packet->packet_price * \App\Models\Currency::usdToKzt();
 
 
         $("#structure_id").bind('change', function () {
-            location.href = "/admin/binary_structure/show?structure_id=" + $(this).val();
+            location.href = "/admin/binary_structure/show?structure_id=" + $(this).val() + "&number=" + $("#number_id").val();
+        });
+        $("#number_id").bind('change', function () {
+            location.href = "/admin/binary_structure/show?number=" + $(this).val() + "&structure_id=" + $("#structure_id").val();
         });
 
         function toPacketShop() {

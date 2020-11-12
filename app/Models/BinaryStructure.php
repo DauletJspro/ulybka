@@ -35,7 +35,7 @@ class BinaryStructure extends Model
 
     public function structure_body()
     {
-        return $this->hasMany(StructureBody::class, 'id', 'binary_structure_id');
+        return $this->hasMany(StructureBody::class, 'binary_structure_id', 'id');
     }
 
     public static function get_structure_by_packet_id($id)
@@ -62,11 +62,13 @@ class BinaryStructure extends Model
     }
 
 
-    public static function get_binary_tree_by_user($user_id, $structure)
+    public static function get_binary_tree_by_user($user_id, $structure, $number)
     {
         $array = [];
         $user_array = [];
-        $tree = json_decode($structure->tree_representation);
+        $body_structure = StructureBody::where(['binary_structure_id' => $structure->id])
+            ->where(['number' => $number])->first();
+        $tree = json_decode($body_structure->tree_representation);
         $user_idx = array_search($user_id, array_values($tree));
 
         $left_child_idx = self::get_left_child_idx($user_idx);

@@ -31,7 +31,7 @@ use \Illuminate\Support\Facades\Session;
 <div id="wrapper">
     <div id="pre-loader" class="loader-container text-center">
         <div class="loader text-center" style="width: 15%;">
-            <img src="/new_design/images/logo/new_logo_1.png" style="width: 100%;" alt="loader">
+            <img src="/new_design/images/logo/logo_linear.png" style="width: 100%;" alt="loader">
         </div>
     </div>
     <div class="w1">

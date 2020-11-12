@@ -16,7 +16,7 @@
             <span class="logo-mini">{{Lang::get('app.website_name')}}</span>
             <!-- logo for regular state and mobile devices -->
             <span class="logo-lg">
-            <img src="/new_design/images/logo/new_logo_1.png?v=3" style="width:140px">
+            <img src="/new_design/images/logo/logo_linear.png?v=3" style="width:140px">
           </span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->

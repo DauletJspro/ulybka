@@ -26,28 +26,41 @@ class BinaryStructureController extends Controller
     public function index(Request $request)
     {
         $structure_id = $request->get('structure_id');
+        $number = $request->get('number');
         if (!isset($structure_id)) {
             $structure_id = 1;
+        }
+        if (!isset($number)) {
+            $number = 1;
         }
 
         $user_id = $request->get('user_id');
         if (!isset($user_id)) {
             $user_id = Auth::user()->user_id;
         }
-        $tree = $this->get_structure_by_user_id($user_id, $structure_id);
-        return view('admin.binary_structure.show', ['tree' => $tree, 'user_id' => $user_id, 'structure_id' => $structure_id]);
+        $tree = $this->get_structure_by_user_id($user_id, $structure_id, $number);
+
+        return view('admin.binary_structure.show', [
+            'tree' => $tree,
+            'user_id' => $user_id,
+            'structure_id' => $structure_id,
+            'number' => $number,
+        ]);
     }
 
     public function find_by_id(Request $request)
     {
 
-
         $login = $request->login;
-
+        $number = $request->get('number');
         $structure_id = $request->get('structure_id');
 
         if ($structure_id == "" || !isset($structure_id)) {
             $structure_id = 1;
+        }
+
+        if ($number == "" || !isset($number)) {
+            $number = 1;
         }
 
         $user = Users::where('login', $login)
@@ -55,7 +68,11 @@ class BinaryStructureController extends Controller
         $user_id = $user->user_id;
 
 
-        return view('admin.binary_structure.show', ['structure_id' => $structure_id, 'user_id' => $user_id]);
+        return view('admin.binary_structure.show', [
+            'structure_id' => $structure_id,
+            'user_id' => $user_id,
+            'number' => $number,
+        ]);
 
 
     }
@@ -126,15 +143,17 @@ class BinaryStructureController extends Controller
         //
     }
 
-    public function get_structure_by_user_id($id, $structure_id = null)
+    public function get_structure_by_user_id($id, $structure_id = null, $number = 1)
     {
 
         if (!isset($structure_id) || $structure_id == "") {
             $structure_id = 1;
         }
 
-        $structure = BinaryStructure::where(['id' => $structure_id])->first();
-        $tree = json_decode($structure->tree_representation);
+        $body_structure = StructureBody::where('binary_structure_id', '=', $structure_id)
+            ->where('number', '=', $number)->first();
+
+        $tree = json_decode($body_structure->tree_representation);
 
         $index = array_search($id, array_values($tree));
         $tree = array_slice($tree, $index, $index + 8);
@@ -710,7 +729,7 @@ class BinaryStructureController extends Controller
                 $operation->money = $bonus;
                 $operation->operation_id = 1;
                 $operation->operation_type_id = 17;
-                $operation->operation_comment = sprintf('Стол: %s, номер стола: %s. Бинарный доход %s$ (%s) тг', $packet->packet_name_ru,$body_structure->number, $bonus, $bonus * Currency::usdToKzt());
+                $operation->operation_comment = sprintf('Стол: %s, номер стола: %s. Бинарный доход %s$ (%s) тг', $packet->packet_name_ru, $body_structure->number, $bonus, $bonus * Currency::usdToKzt());
                 $operation->save();
 
                 DB::commit();

@@ -76,8 +76,8 @@ $subsidiaries = \App\Models\Brand::whereIn('id', $needSubsidiaryIds)->get();
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="mt-logo"><a href="/"><img src="/new_design/images/logo/new_logo_1.png" alt="schon"
-                                                          style="height: 70px; width: 220px;margin-top: -4px;"></a>
+                    <div class="mt-logo"><a href="/"><img src="/new_design/images/logo/smile_logo.png" alt="schon"
+                                                          style="height: 100px; width: 100px;margin-top: -4px;"></a>
                     </div>
                     <?php $totalPrice = 0;?>
                     <?php $total = 0;?>
