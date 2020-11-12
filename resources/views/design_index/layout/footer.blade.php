@@ -63,7 +63,7 @@
                     <!-- F Widget About of the Page -->
                     <div class="f-widget-about" style="color: white;">
                         <div class="logo">
-                            <a href="/admin/index"><img style="height: 40px; width: 140px;" src="/new_design/images/logo/new_logo_1.png" alt="ulybka.kz"></a>
+                            <a href="/admin/index"><img style="height: 40px; width: 140px;" src="/new_design/images/logo/logo_linear.png" alt="ulybka.kz"></a>
                         </div>
                         {{-- <p>Компания по продвижению товаров и услуг
                             через сеть независимых партнеров</p> --}}
@@ -156,7 +156,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-sm-6">
-                    <p>© <a href="index.html">go DIAMOND</a> - становись БРИЛЛИАНТОМ</p>
+                    <p>© <a href="index.html">ulybka.kz</a></p>
                 </div>
                 <div class="col-xs-12 col-sm-6 text-right">
                 </div>

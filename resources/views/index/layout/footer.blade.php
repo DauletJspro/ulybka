@@ -74,7 +74,7 @@
 
                     <div class="copyright">
                         <p><i class="fa fa-copyright"></i>
-                        <p>Copyright c 2020 <a href="/"> Go Diamond </a>- Все права защищены.</p>
+                        <p>Copyright c 2020 <a href="/"> ulybka.kz </a>- Все права защищены.</p>
                     </div>
 
                     <!-- Go Top -->
