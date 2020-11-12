@@ -128,7 +128,6 @@ class AuthController extends Controller
 //            'city_id' => 'required|numeric',
             'password' => 'required|min:5',
             'recommend_user_id' => 'required',
-            'inviter_user_id' => 'required',
             'confirm_password' => 'required|same:password',
             'email' => 'required|email|unique:users,email,NULL,user_id,deleted_at,NULL',
             'login' => 'required|unique:users,login,NULL,user_id,deleted_at,NULL',
