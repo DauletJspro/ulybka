@@ -113,7 +113,7 @@
 
     </div><!-- /.content-wrapper -->
     <footer class="main-footer">
-        <strong>Copyright &copy; {{ date('Y') }} <a href="/"> go_diamond.kz </a>.</strong>
+        <strong>Copyright &copy; {{ date('Y') }} <a href="/"> ulybka.kz </a>.</strong>
     </footer>
 
     <aside class="control-sidebar control-sidebar-dark">
