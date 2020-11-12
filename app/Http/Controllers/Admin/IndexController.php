@@ -24,6 +24,10 @@ class IndexController extends Controller
         $this->middleware('profile', ['only' => ['index', 'callFriend']]);
     }
 
+    public function test(){
+        return view('admin.test.test');
+    }
+
     public function index(Request $request)
     {
         $request->profit_all = UserOperation::where('recipient_id', Auth::user()->user_id)

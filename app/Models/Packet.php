@@ -13,13 +13,11 @@ class Packet extends Model
     protected $table = 'packet';
     protected $primaryKey = 'packet_id';
 
-    const SILVER = 1;
-    const GOLD = 2;
-    const PLATINUM = 3;
-    const RUBIN = 4;
-    const SAPPHIRE = 5;
-    const EMERALD = 6;
-    const DIAMOND = 7;
+    const FIRST_TABLE = 1;
+    const SECOND_TABLE = 2;
+    const THIRD_TABLE = 3;
+    const FOURTH_TABLE = 4;
+    const FIFTH_TABLE = 5;
 
     use SoftDeletes;
 
@@ -28,13 +26,11 @@ class Packet extends Model
     public static function actualPacket()
     {
         return [
-            self::SILVER,
-            self::GOLD,
-            self::PLATINUM,
-            self::RUBIN,
-            self::SAPPHIRE,
-            self::EMERALD,
-            self::DIAMOND,
+            self::FIRST_TABLE,
+            self::SECOND_TABLE,
+            self::THIRD_TABLE,
+            self::FOURTH_TABLE,
+            self::FIFTH_TABLE,
         ];
     }
 

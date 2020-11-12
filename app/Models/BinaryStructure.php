@@ -24,30 +24,38 @@ class BinaryStructure extends Model
     const VIEW_TYPE_ONLY_TRIPLE = 2;
 
 
+    public static function get_body_structure_by_number($binary_structure_id, $number = 1)
+    {
+        $structure_body = StructureBody::where(['binary_structure_id' => $binary_structure_id])
+            ->where(['number' => $number])
+            ->first();
+
+        return $structure_body;
+    }
+
+    public function structure_body()
+    {
+        return $this->hasMany(StructureBody::class, 'id', 'binary_structure_id');
+    }
+
     public static function get_structure_by_packet_id($id)
     {
         $structure_id = null;
         switch ($id) {
-            case Packet::SILVER:
+            case Packet::FIRST_TABLE:
                 $structure_id = self::FIRST_STRUCTURE;
                 break;
-            case Packet::GOLD:
+            case Packet::SECOND_TABLE:
                 $structure_id = self::SECOND_STRUCTURE;
                 break;
-            case Packet::PLATINUM:
+            case Packet::THIRD_TABLE:
                 $structure_id = self::THIRD_STRUCTURE;
                 break;
-            case Packet::RUBIN:
+            case Packet::FOURTH_TABLE:
                 $structure_id = self::FOURTH_STRUCTURE;
                 break;
-            case Packet::SAPPHIRE:
+            case Packet::FIFTH_TABLE:
                 $structure_id = self::FIFTH_STRUCTURE;
-                break;
-            case Packet::EMERALD:
-                $structure_id = self::SIXTH_STRUCTURE;
-                break;
-            case Packet::DIAMOND:
-                $structure_id = self::SEVENTH_STRUCTURE;
                 break;
         }
         return $structure_id;

@@ -37,6 +37,7 @@ Route::group([
 ], function () {
 
     Route::get('index', 'IndexController@index');
+    Route::get('test', 'IndexController@test');
 
     Route::get('world/{packet_url}', 'WorldController@clientList');
     Route::get('standart', 'WorldController@standart');

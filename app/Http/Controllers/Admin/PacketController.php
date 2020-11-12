@@ -449,13 +449,11 @@ class PacketController extends Controller
     function qualificationUp($packet, $user)
     {
         $actualPackets = [
-            Packet::SILVER,
-            Packet::GOLD,
-            Packet::PLATINUM,
-            Packet::RUBIN,
-            Packet::SAPPHIRE,
-            Packet::EMERALD,
-            Packet::DIAMOND
+            Packet::FIRST_TABLE,
+            Packet::SECOND_TABLE,
+            Packet::THIRD_TABLE,
+            Packet::FOURTH_TABLE,
+            Packet::FIFTH_TABLE,
         ];
         if (in_array($packet->packet_id, $actualPackets)) {
 
@@ -466,20 +464,16 @@ class PacketController extends Controller
             $operation->operation_id = 1;
             $operation->operation_type_id = 10;
 
-            if ($packet->packet_status_id == UserStatus::SILVER)
-                $operation->operation_comment = 'Ваш статус Silver стол';
-            elseif ($packet->packet_status_id == UserStatus::GOLD)
-                $operation->operation_comment = 'Ваш статус Gold стол';
-            elseif ($packet->packet_status_id == UserStatus::PLATINUM)
-                $operation->operation_comment = 'Ваш статус Platinum стол';
-            elseif ($packet->packet_status_id == UserStatus::RUBIN)
-                $operation->operation_comment = 'Ваш статус Rubin стол';
-            elseif ($packet->packet_status_id == UserStatus::SAPPHIRE)
-                $operation->operation_comment = 'Ваш статус Sapphire стол';
-            elseif ($packet->packet_status_id == UserStatus::EMERALD)
-                $operation->operation_comment = 'Ваш статус Emerald стол';
-            elseif ($packet->packet_status_id == UserStatus::DIAMOND)
-                $operation->operation_comment = 'Ваш статус Diamond стол';
+            if ($packet->packet_status_id == UserStatus::FIRST_TABLE)
+                $operation->operation_comment = 'Ваш статус Первый стол';
+            elseif ($packet->packet_status_id == UserStatus::SECOND_TABLE)
+                $operation->operation_comment = 'Ваш статус Второй стол';
+            elseif ($packet->packet_status_id == UserStatus::THIRD_TABLE)
+                $operation->operation_comment = 'Ваш статус Третий стол';
+            elseif ($packet->packet_status_id == UserStatus::FOURTH_TABLE)
+                $operation->operation_comment = 'Ваш статус Четвертый стол';
+            elseif ($packet->packet_status_id == UserStatus::FIFTH_TABLE)
+                $operation->operation_comment = 'Ваш статус Пятый стол';
 
             $operation->save();
             $user->status_id = $packet->packet_status_id;
