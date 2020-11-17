@@ -649,6 +649,7 @@ class BinaryStructureController extends Controller
 
         $user_id_2 = sprintf("%s_%s", 2, $new_user_number);
         $user_id_3 = sprintf("%s_%s", 3, $new_user_number);
+        #todo
 //        $user_id_4 = sprintf("%s_%s", 4, $new_user_number);
 //        $user_id_5 = sprintf("%s_%s", 5, $new_user_number);
 //        $user_id_6 = sprintf("%s_%s", 6, $new_user_number);
@@ -658,6 +659,7 @@ class BinaryStructureController extends Controller
         $tree = [
             $user_id_2,
             $user_id_3,
+            #todo
 //            $user_id_4,
 //            $user_id_5,
 //            $user_id_6,

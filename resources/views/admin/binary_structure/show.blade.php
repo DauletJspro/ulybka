@@ -10,13 +10,18 @@ $users = \App\Models\BinaryStructure::get_binary_tree_by_user($user_id, $structu
 $packet = \App\Models\Packet::where(['packet_id' => $structure->id])->first();
 $packet_price = $packet->packet_price * \App\Models\Currency::usdToKzt();
 $is_show_last_4 = true;
-
-//if ($structure_id == 2) {
-//    $is_show_last_4 = false;
-//}
-//if ($structure_id == 4) {
-//    $is_show_last_4 = false;
-//}
+$padding_left = 0;
+$padding_left_2  =  0;
+if ($structure_id == 2) {
+    $is_show_last_4 = false;
+    $padding_left = 150;
+    $padding_left_2  =  100;
+}
+if ($structure_id == 4) {
+    $padding_left = 150;
+    $padding_left_2 = 100;
+    $is_show_last_4 = false;
+}
 
 ?>
 @extends('admin.layout.layout')
@@ -105,7 +110,7 @@ $is_show_last_4 = true;
                                                     style="background-color:#f39c12; border: 0;">
                                                 @if(!isset($users[0]))
                                                     Купить место <span
-                                                            class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                            class="visible-lg visible-xl visible-md hidden-sm hidden-xs"></span>
                                                 @else
                                                     Куплено
                                                 @endif
@@ -137,7 +142,7 @@ $is_show_last_4 = true;
                                                             style="background-color:#f39c12; border: 0;">
                                                         @if(!isset($users[1]))
                                                             Купить место <span
-                                                                    class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                                    class="visible-lg visible-xl visible-md hidden-sm hidden-xs"></span>
                                                         @else
                                                             Куплено
                                                         @endif
@@ -170,7 +175,7 @@ $is_show_last_4 = true;
                                                                         style="background-color:#f39c12; border: 0;">
                                                                     @if(!isset($users[3]))
                                                                         Купить место <span
-                                                                                class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                                                class="visible-lg visible-xl visible-md hidden-sm hidden-xs"></span>
                                                                     @else
                                                                         Куплено
                                                                     @endif
@@ -202,7 +207,7 @@ $is_show_last_4 = true;
                                                                         style="background-color:#f39c12; border: 0;">
                                                                     @if(!isset($users[4]))
                                                                         Купить место <span
-                                                                                class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                                                class="visible-lg visible-xl visible-md hidden-sm hidden-xs"></span>
                                                                     @else
                                                                         Куплено
                                                                     @endif
@@ -237,7 +242,7 @@ $is_show_last_4 = true;
                                                             style="background-color:#f39c12; border: 0;">
                                                         @if(!isset($users[2]))
                                                             Купить место <span
-                                                                    class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                                    class="visible-lg visible-xl visible-md hidden-sm hidden-xs"></span>
                                                         @else
                                                             Куплено
                                                         @endif
@@ -270,7 +275,7 @@ $is_show_last_4 = true;
                                                                         style="background-color:#f39c12; border: 0;">
                                                                     @if(!isset($users[5]))
                                                                         Купить место <span
-                                                                                class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                                                class="visible-lg visible-xl visible-md hidden-sm hidden-xs"></span>
                                                                     @else
                                                                         Куплено
                                                                     @endif
@@ -302,7 +307,7 @@ $is_show_last_4 = true;
                                                                         style="background-color:#f39c12; border: 0;">
                                                                     @if(!isset($users[6]))
                                                                         Купить место <span
-                                                                                class="visible-lg visible-xl visible-md hidden-sm hidden-xs">({{$packet_price}})</span>
+                                                                                class="visible-lg visible-xl visible-md hidden-sm hidden-xs"></span>
                                                                     @else
                                                                         Куплено
                                                                     @endif
@@ -550,7 +555,7 @@ $is_show_last_4 = true;
     @media only screen and (max-width: 600px) {
 
         .tree_li {
-            padding-left: 60px !important;
+            padding-left: {{60+$padding_left}}px !important;
         }
 
         .thumbnail .caption span {
@@ -606,7 +611,7 @@ $is_show_last_4 = true;
 
     @media only screen and (max-width: 452px) {
         .tree_li {
-            padding-left: 0 !important;
+            padding-left: {{0 + $padding_left_2}} !important;
         }
 
         .thumbnail {
@@ -625,7 +630,7 @@ $is_show_last_4 = true;
     /* Small devices (portrait tablets and large phones, 600px and up) */
     @media only screen and (min-width: 600px) {
         .tree_li {
-            padding-left: 60px !important;
+            padding-left: {{60+$padding_left}}px !important;
         }
 
         .thumbnail .caption span {
@@ -672,7 +677,7 @@ $is_show_last_4 = true;
     @media only screen and (min-width: 768px) {
 
         .tree_li {
-            padding-left: 90px !important;
+            padding-left: {{90+$padding_left}}px !important;
         }
 
         .thumbnail .caption span {
@@ -731,7 +736,7 @@ $is_show_last_4 = true;
     @media only screen and (min-width: 992px) {
 
         .tree_li {
-            padding-left: 120px !important;
+            padding-left: {{120+$padding_left}}px !important;
         }
 
         .thumbnail .caption span {
