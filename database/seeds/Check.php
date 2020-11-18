@@ -78,35 +78,6 @@ class Check extends Seeder
             app(BinaryStructureController::class)->to_next_structure(14, 3, $structure, $from_structure, null, 2, null);
             app(BinaryStructureController::class)->to_next_structure(15, 3, $structure, $from_structure, null, 2, null);
             app(BinaryStructureController::class)->to_next_structure(16, 3, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(5, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(6, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(7, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(8, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(9, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(10, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(11, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(12, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(13, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(14, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(15, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(16, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(17, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(18, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(19, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(20, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(21, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(22, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(23, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(24, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(25, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(26, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(27, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(28, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(29, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(30, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(31, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(32, 1, $structure, $from_structure, null, 2, null);
-//            app(BinaryStructureController::class)->to_next_structure(33, 1, $structure, $from_structure, null, 2, null);
 
 //            $body_structure = \App\Models\StructureBody::where(['binary_structure_id' => 1])
 //                ->where(['number' => 2])->first();
