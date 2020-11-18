@@ -45,7 +45,6 @@ class AddAdminsToUsers extends Seeder
                     'status_id' => 7,
                     'is_activated' => 1,
                     'activated_date' => Carbon::createFromFormat('Y-m-d H:i:s', $now),
-                    'parent_id' => 0,
                     'instagram' => '',
                 ]
             );
@@ -77,7 +76,6 @@ class AddAdminsToUsers extends Seeder
                     'status_id' => 7,
                     'is_activated' => 1,
                     'activated_date' => Carbon::createFromFormat('Y-m-d H:i:s', $now),
-                    'parent_id' => 1,
                     'instagram' => '',
                 ]
             );
@@ -109,7 +107,6 @@ class AddAdminsToUsers extends Seeder
                     'status_id' => 7,
                     'is_activated' => 1,
                     'activated_date' => Carbon::createFromFormat('Y-m-d H:i:s', $now),
-                    'parent_id' => 2,
                     'instagram' => '',
                 ]
             );
@@ -130,7 +127,7 @@ class AddAdminsToUsers extends Seeder
                     'is_ban' => 0,
                     'last_name' => 'Админ3',
                     'middle_name' => '',
-                    'recommend_user_id' => 3,
+                    'recommend_user_id' => 2,
                     'city_id' => 2,
                     'user_money' => 0,
                     'office_director_id' => null,
@@ -141,7 +138,6 @@ class AddAdminsToUsers extends Seeder
                     'status_id' => 7,
                     'is_activated' => 1,
                     'activated_date' => Carbon::createFromFormat('Y-m-d H:i:s', $now),
-                    'parent_id' => 3,
                     'instagram' => '',
                 ]
             );
@@ -162,7 +158,7 @@ class AddAdminsToUsers extends Seeder
                     'is_ban' => 0,
                     'last_name' => 'Админ4',
                     'middle_name' => '',
-                    'recommend_user_id' => 4,
+                    'recommend_user_id' => 3,
                     'city_id' => 2,
                     'user_money' => 0,
                     'office_director_id' => null,
@@ -173,7 +169,6 @@ class AddAdminsToUsers extends Seeder
                     'status_id' => 7,
                     'is_activated' => 1,
                     'activated_date' => Carbon::createFromFormat('Y-m-d H:i:s', $now),
-                    'parent_id' => 4,
                     'instagram' => '',
 
                 ]
@@ -195,7 +190,7 @@ class AddAdminsToUsers extends Seeder
                     'is_ban' => 0,
                     'last_name' => 'Админ5',
                     'middle_name' => '',
-                    'recommend_user_id' => 5,
+                    'recommend_user_id' => 3,
                     'city_id' => 2,
                     'user_money' => 0,
                     'office_director_id' => null,
@@ -206,7 +201,6 @@ class AddAdminsToUsers extends Seeder
                     'status_id' => 7,
                     'is_activated' => 1,
                     'activated_date' => Carbon::createFromFormat('Y-m-d H:i:s', $now),
-                    'parent_id' => 5,
                     'instagram' => '',
 
                 ]
@@ -228,7 +222,7 @@ class AddAdminsToUsers extends Seeder
                     'is_ban' => 0,
                     'last_name' => 'Админ6',
                     'middle_name' => '',
-                    'recommend_user_id' => 6,
+                    'recommend_user_id' => 4,
                     'city_id' => 2,
                     'user_money' => 0,
                     'office_director_id' => null,
@@ -239,7 +233,6 @@ class AddAdminsToUsers extends Seeder
                     'status_id' => 7,
                     'is_activated' => 1,
                     'activated_date' => Carbon::createFromFormat('Y-m-d H:i:s', $now),
-                    'parent_id' => 1000,
                     'instagram' => '',
 
                 ]
@@ -261,7 +254,7 @@ class AddAdminsToUsers extends Seeder
                     'is_ban' => 0,
                     'last_name' => 'Админ7',
                     'middle_name' => '',
-                    'recommend_user_id' => 7,
+                    'recommend_user_id' => 4,
                     'city_id' => 2,
                     'user_money' => 0,
                     'office_director_id' => null,
@@ -272,7 +265,6 @@ class AddAdminsToUsers extends Seeder
                     'status_id' => 7,
                     'is_activated' => 1,
                     'activated_date' => Carbon::createFromFormat('Y-m-d H:i:s', $now),
-                    'parent_id' => 1001,
                     'instagram' => '',
 
                 ]
