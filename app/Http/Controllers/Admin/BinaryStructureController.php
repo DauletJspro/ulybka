@@ -601,7 +601,7 @@ class BinaryStructureController extends Controller
     }
 
     public
-    function qualificationUp($user_id, $packet_id, $next_body_structure)
+    function qualificationUp($user_id, $packet_id, $next_body_structure = null)
     {
         $user = Users::get_user($user_id);
         $packet = Packet::where(['packet_id' => $packet_id])->first();
