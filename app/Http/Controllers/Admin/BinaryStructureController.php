@@ -154,9 +154,18 @@ class BinaryStructureController extends Controller
             ->where('number', '=', $number)->first();
 
         $tree = json_decode($body_structure->tree_representation);
+        $mod_tree = [];
+
+        if ($number >= 1) {
+            foreach ($tree as $key => $item) {
+                $mod_tree[$key] = explode("_", $item)[0];
+            }
+            $tree = $mod_tree;
+        }
 
         $index = array_search($id, array_values($tree));
         $tree = array_slice($tree, $index, $index + 8);
+
 
         if (!in_array($id, $tree)) {
             $tree = [];
@@ -189,6 +198,9 @@ class BinaryStructureController extends Controller
 
         if ($tree == NULL) {
             $this->set_root($user_id, $structure, $from_structure, $body_structure_number, $parent_number);
+            $parent = explode("_", $user_id);
+            $user_id = $parent[0];
+            $this->to_next_structure($user_id, $packet_id, $structure, $from_structure, $user_packet_id, $body_structure_number, $parent_number);
             return true;
         }
 
@@ -198,20 +210,26 @@ class BinaryStructureController extends Controller
             $tree = $this->set_child($structure, $user_id, 0, $body_structure);
         }
 
-        if (isset($parent_number)) {
-            $user_id = sprintf("%s_%s", $user_id, $parent_number);
+
+        if ($copy_structure) {
+            if (isset($parent_number)) {
+                $user_id = sprintf("%s_%s", $user_id, $parent_number);
+            }
+            if (!isset($parent_number)) {
+                if ($from_structure->id == BinaryStructure::THIRD_STRUCTURE) {
+                    $user_id = sprintf("%s_%s", $user_id, 2);
+                } elseif ($from_structure->id == BinaryStructure::FOURTH_STRUCTURE) {
+                    $user_id = sprintf("%s_%s", $user_id, 3);
+                }
+            }
         }
 
 
         $user_idx = $tree ? array_search($user_id, array_values($tree)) : null;
-
-        if ($copy_structure) {
-            var_dump($parent_number);
-        }
-
         if (!$user_idx) {
             return true;
         }
+
 
         $first_parent_index = $this->get_first_parent_idx($user_idx, $user_idx, 0, $structure, $body_structure, $packet_id);
 
@@ -222,9 +240,8 @@ class BinaryStructureController extends Controller
                 $from_structure = $structure;
                 if ($structure->id == BinaryStructure::THIRD_STRUCTURE) {
                     $parent = explode("_", $tree[$first_parent_index]);
-                    var_dump($parent);
                     $first_parent_id = $parent[0];
-                    $parent_number = isset($parent[1]) ? $parent[1] : 1;
+                    $parent_number = isset($parent[1]) ? $parent[1] : null;
                     $structure = BinaryStructure::where(['id' => BinaryStructure::FIRST_STRUCTURE])->first();
                     $this->duplicate_notification($first_parent_id, $packet_id);
                     $this->to_next_structure($first_parent_id, Packet::FIRST_TABLE, $structure, $from_structure, $user_packet_id, ($body_structure_number + 1), $parent_number);
@@ -232,7 +249,7 @@ class BinaryStructureController extends Controller
                 if ($structure->id == BinaryStructure::FOURTH_STRUCTURE) {
                     $parent = explode("_", $tree[$first_parent_index]);
                     $first_parent_id = $parent[0];
-                    $parent_number = isset($parent[1]) ? $parent[1] : 1;
+                    $parent_number = isset($parent[1]) ? $parent[1] : null;
                     $structure = BinaryStructure::where(['id' => BinaryStructure::FIRST_STRUCTURE])->first();
                     $this->duplicate_notification($first_parent_id, $packet_id);
                     $this->to_next_structure($first_parent_id, Packet::FIRST_TABLE, $structure, $from_structure, $user_packet_id, ($body_structure_number + 1), $parent_number);
@@ -244,11 +261,24 @@ class BinaryStructureController extends Controller
 
                 if ($copy_structure) {
                     $parent = explode("_", $tree[$first_parent_index]);
+                    if (($from_structure->id == BinaryStructure::THIRD_STRUCTURE && $structure->id = BinaryStructure::FIRST_STRUCTURE )||
+                        ($from_structure->id == BinaryStructure::FOURTH_STRUCTURE && $structure->id == BinaryStructure::FIRST_STRUCTURE)) {
+                        $mod_packet_id = 1;
+                        $body_structure_number++;
+                    } else {
+                        $mod_packet_id = $packet_id + 1;
+                    }
+                    $next_tree = StructureBody::where(['binary_structure_id' => ($mod_packet_id)])
+                        ->where(['number' => $body_structure_number])
+                        ->first();
+                    $next_tree = json_decode($next_tree->tree_representation);
+
                     $first_parent_id = $parent[0];
                     $parent_number = $parent[1];
-                    var_dump($parent_number);
-                    $this->qualificationUp($first_parent_id, ($packet_id + 1));
-                    $this->to_next_structure($first_parent_id, ($packet_id + 1), $structure, $from_structure, $user_packet_id, ($body_structure_number), $parent_number);
+                    if (!in_array($tree[$first_parent_index], $next_tree)) {
+                        $this->qualificationUp($first_parent_id, ($packet_id + 1), $body_structure_number);
+                        $this->to_next_structure($first_parent_id, ($packet_id + 1), $structure, $from_structure, $user_packet_id, ($body_structure_number), $parent_number);
+                    }
                 } else {
                     $this->qualificationUp($first_parent_id, ($packet_id + 1));
                     $this->to_next_structure($first_parent_id, ($packet_id + 1), $structure, $from_structure, $user_packet_id);
@@ -365,6 +395,7 @@ class BinaryStructureController extends Controller
         $parents = $this->get_all_parents($user_id);
         $parents = $this->correct_parents_by_copy_structure($tree, $parents, $body_structure);
 
+
         $from_structure_id = $from_structure->id;
         $body_structure_number = $body_structure->number - 1;
 
@@ -388,7 +419,6 @@ class BinaryStructureController extends Controller
             $user_id = explode("_", $user_id)[0];
             $user_id = sprintf("%s_%s", $user_id, $parent_number);
         }
-
         if (count($parents) && !in_array($user_id, $tree)) {
             $exist = in_array($parents[$next_parent_counter], $tree);
             if (!$exist) {
@@ -396,7 +426,6 @@ class BinaryStructureController extends Controller
                 $this->set_child_to_copy_structure($structure, $from_structure, $user_id, $next_parent_counter + 1, $body_structure, $parent_number);
             } else {
                 $check = $this->check_free_position($parents[$next_parent_counter], $tree);
-
                 if (!$check) {
                     $user_child = $this->all_child_from_user_by_parent_id($parents[$next_parent_counter], null);
                     $user_child = $this->correct_child_to_copy_structure($tree, $user_child, $body_structure);
@@ -572,11 +601,11 @@ class BinaryStructureController extends Controller
     }
 
     public
-    function qualificationUp($user_id, $packet_id)
+    function qualificationUp($user_id, $packet_id, $next_body_structure)
     {
         $user = Users::get_user($user_id);
         $packet = Packet::where(['packet_id' => $packet_id])->first();
-        app(PacketController::class)->qualificationUp($packet, $user);
+        app(PacketController::class)->qualificationUp($packet, $user, $next_body_structure);
     }
 
     public
@@ -604,20 +633,20 @@ class BinaryStructureController extends Controller
         }
 
         $tree = json_decode($body_structure->tree_representation);
-        if (!in_array($user_id, $tree)) {
-            $tree[count($tree)] = $user_id;
-        }
-        $tree = json_encode($tree);
+//        if (!in_array($user_id, $tree)) {
+//            $tree[count($tree)] = $user_id;
+//        }
+//        $tree = json_encode($tree);
 
 
-        $body_structure->tree_representation = $tree;
-        $body_structure->save();
+//        $body_structure->tree_representation = $tree;
+//        $body_structure->save();
     }
 
 
     public function setAdmins($structure, $structure_body_number)
     {
-        $tree = [2,3
+        $tree = [2, 3
 //            ,
 //            4,5,6,7,8
         ];
@@ -715,7 +744,13 @@ class BinaryStructureController extends Controller
         $tree = json_decode($body_structure->tree_representation);
         $binary_percentage = $structure->to_binary_structure;
         $parent_id = $tree[$parent_index];
+        $split = explode("_", $parent_id);
         $child_id = $tree[$child_idx];
+        if (isset($split[1])) {
+            $parent_id = $split[0];
+            $child_id = explode("_", $child_id)[0];
+        }
+
         if ($counter == 1) {
             $bonus = $structure->to_second_parent;
         } elseif ($counter == 2) {

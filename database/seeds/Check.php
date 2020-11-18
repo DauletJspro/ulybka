@@ -13,18 +13,25 @@ class Check extends Seeder
     public function run()
     {
         try {
-//            app(BinaryStructureController::class)->to_next_structure(11, 2);
-//            app(BinaryStructureController::class)->to_next_structure(7, 2);
-//            app(BinaryStructureController::class)->to_next_structure(8, 2);
-//            app(BinaryStructureController::class)->to_next_structure(12, 1);
-//            app(BinaryStructureController::class)->to_next_structure(13, 1);
-//            app(BinaryStructureController::class)->to_next_structure(20, 4);
-//            app(BinaryStructureController::class)->to_next_structure(24, 4);
-//            app(BinaryStructureController::class)->to_next_structure(25, 4);
-//            app(BinaryStructureController::class)->to_next_structure(32, 4);
-//            app(BinaryStructureController::class)->to_next_structure(33, 4);
-//            app(BinaryStructureController::class)->to_next_structure(47, 4);
-//            app(BinaryStructureController::class)->to_next_structure(48, 4);
+//            app(BinaryStructureController::class)->to_next_structure(2, 3);
+//            app(BinaryStructureController::class)->to_next_structure(3, 3);
+//            app(BinaryStructureController::class)->to_next_structure(4, 4);
+//            app(BinaryStructureController::class)->to_next_structure(5, 4);
+//            app(BinaryStructureController::class)->to_next_structure(6, 4);
+//            app(BinaryStructureController::class)->to_next_structure(7, 4);
+//            app(BinaryStructureController::class)->to_next_structure(8, 4);
+//            app(BinaryStructureController::class)->to_next_structure(9, 4);
+//            app(BinaryStructureController::class)->to_next_structure(10, 4);
+//            app(BinaryStructureController::class)->to_next_structure(11, 4);
+//            app(BinaryStructureController::class)->to_next_structure(12, 4);
+//            app(BinaryStructureController::class)->to_next_structure(13, 3);
+//            app(BinaryStructureController::class)->to_next_structure(14, 3);
+//            app(BinaryStructureController::class)->to_next_structure(15, 3);
+//            app(BinaryStructureController::class)->to_next_structure(16, 3);
+//            app(BinaryStructureController::class)->to_next_structure(17, 3);
+//            app(BinaryStructureController::class)->to_next_structure(18, 3);
+//            app(BinaryStructureController::class)->to_next_structure(19, 3);
+//            app(BinaryStructureController::class)->to_next_structure(20, 3);
 
 //            app(BinaryStructureController::class)->to_next_structure(22, 4);
 //            app(BinaryStructureController::class)->to_next_structure(23, 4);
@@ -45,9 +52,9 @@ class Check extends Seeder
 //            app(BinaryStructureController::class)->to_next_structure(4, 4);
 //            app(BinaryStructureController::class)->to_next_structure(5, 4);
 //            app(BinaryStructureController::class)->to_next_structure(6, 4);
-            app(BinaryStructureController::class)->to_next_structure(7, 4);
-            app(BinaryStructureController::class)->to_next_structure(8, 4);
-            app(BinaryStructureController::class)->to_next_structure(9, 4);
+//            app(BinaryStructureController::class)->to_next_structure(7, 4);
+//            app(BinaryStructureController::class)->to_next_structure(8, 4);
+//            app(BinaryStructureController::class)->to_next_structure(9, 4);
 //            app(BinaryStructureController::class)->get_all_parents(15);\
 
 //            $users_till_50 = \App\Models\Users::where('user_id', '>', 3)
@@ -56,8 +63,50 @@ class Check extends Seeder
 //            foreach ($users_till_50 as $item) {
 //                app(BinaryStructureController::class)->to_next_structure($item->user_id, 2);
 //            }
-//            $structure = \App\Models\BinaryStructure::where(['id' => 4])->first();
-//            app(BinaryStructureController::class)->to_next_structure(4, 4, $structure, $structure, null, 2, 3);
+            $structure = \App\Models\BinaryStructure::where(['id' => 3])->first();
+            $from_structure = \App\Models\BinaryStructure::where(['id' => 2])->first();
+            app(BinaryStructureController::class)->to_next_structure(4, 3, $structure, $from_structure, null, 2, null);
+            app(BinaryStructureController::class)->to_next_structure(5, 3, $structure, $from_structure, null, 2, null);
+            app(BinaryStructureController::class)->to_next_structure(6, 3, $structure, $from_structure, null, 2, null);
+            app(BinaryStructureController::class)->to_next_structure(7, 3, $structure, $from_structure, null, 2, null);
+            app(BinaryStructureController::class)->to_next_structure(8, 3, $structure, $from_structure, null, 2, null);
+            app(BinaryStructureController::class)->to_next_structure(9, 3, $structure, $from_structure, null, 2, null);
+            app(BinaryStructureController::class)->to_next_structure(10, 3, $structure, $from_structure, null, 2, null);
+            app(BinaryStructureController::class)->to_next_structure(11, 3, $structure, $from_structure, null, 2, null);
+            app(BinaryStructureController::class)->to_next_structure(12, 3, $structure, $from_structure, null, 2, null);
+            app(BinaryStructureController::class)->to_next_structure(13, 3, $structure, $from_structure, null, 2, null);
+            app(BinaryStructureController::class)->to_next_structure(14, 3, $structure, $from_structure, null, 2, null);
+            app(BinaryStructureController::class)->to_next_structure(15, 3, $structure, $from_structure, null, 2, null);
+            app(BinaryStructureController::class)->to_next_structure(16, 3, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(5, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(6, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(7, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(8, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(9, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(10, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(11, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(12, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(13, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(14, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(15, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(16, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(17, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(18, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(19, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(20, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(21, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(22, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(23, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(24, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(25, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(26, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(27, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(28, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(29, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(30, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(31, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(32, 1, $structure, $from_structure, null, 2, null);
+//            app(BinaryStructureController::class)->to_next_structure(33, 1, $structure, $from_structure, null, 2, null);
 
 //            $body_structure = \App\Models\StructureBody::where(['binary_structure_id' => 1])
 //                ->where(['number' => 2])->first();

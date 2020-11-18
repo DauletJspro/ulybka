@@ -363,7 +363,7 @@ class PacketController extends Controller
             $packet_id = $user_packet->packet_id;
             try {
                 $result = $this->implementPacketBonuses($user_packet->user_packet_id);
-                if(!$result['status']){
+                if (!$result['status']) {
                     return $result = [
                         'message' => $result['message'],
                         'status' => false,
@@ -404,9 +404,9 @@ class PacketController extends Controller
             $result['status'] = false;
             return $result;
         }
-        $result= $this->activatePackage($userPacket);
+        $result = $this->activatePackage($userPacket);
 
-        if(!$result['status']){
+        if (!$result['status']) {
             return $result = [
                 'status' => false,
                 'message' => $result['message'],
@@ -445,8 +445,9 @@ class PacketController extends Controller
     }
 
     public
-    function qualificationUp($packet, $user)
+    function qualificationUp($packet, $user, $next_body_structure = null)
     {
+        $next_body_structure = isset($next_body_structure) ? $next_body_structure : 1;
         $actualPackets = [
             Packet::FIRST_TABLE,
             Packet::SECOND_TABLE,
@@ -464,15 +465,15 @@ class PacketController extends Controller
             $operation->operation_type_id = 10;
 
             if ($packet->packet_status_id == UserStatus::FIRST_TABLE)
-                $operation->operation_comment = 'Ваш статус Первый стол';
+                $operation->operation_comment = 'Ваш статус Первый стол, номер стола: ' . $next_body_structure;
             elseif ($packet->packet_status_id == UserStatus::SECOND_TABLE)
-                $operation->operation_comment = 'Ваш статус Второй стол';
+                $operation->operation_comment = 'Ваш статус Второй стол, номер стола: ' . $next_body_structure;
             elseif ($packet->packet_status_id == UserStatus::THIRD_TABLE)
-                $operation->operation_comment = 'Ваш статус Третий стол';
+                $operation->operation_comment = 'Ваш статус Третий стол, номер стола: ' . $next_body_structure;
             elseif ($packet->packet_status_id == UserStatus::FOURTH_TABLE)
-                $operation->operation_comment = 'Ваш статус Четвертый стол';
+                $operation->operation_comment = 'Ваш статус Четвертый стол, номер стола: ' . $next_body_structure;
             elseif ($packet->packet_status_id == UserStatus::FIFTH_TABLE)
-                $operation->operation_comment = 'Ваш статус Пятый стол';
+                $operation->operation_comment = 'Ваш статус Пятый стол, номер стола: ' . $next_body_structure;
 
             $operation->save();
             $user->status_id = $packet->packet_status_id;
