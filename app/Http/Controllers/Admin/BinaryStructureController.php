@@ -261,7 +261,7 @@ class BinaryStructureController extends Controller
 
                 if ($copy_structure) {
                     $parent = explode("_", $tree[$first_parent_index]);
-                    if (($from_structure->id == BinaryStructure::THIRD_STRUCTURE && $structure->id = BinaryStructure::FIRST_STRUCTURE )||
+                    if (($from_structure->id == BinaryStructure::THIRD_STRUCTURE && $structure->id = BinaryStructure::FIRST_STRUCTURE) ||
                         ($from_structure->id == BinaryStructure::FOURTH_STRUCTURE && $structure->id == BinaryStructure::FIRST_STRUCTURE)) {
                         $mod_packet_id = 1;
                         $body_structure_number++;
@@ -646,10 +646,7 @@ class BinaryStructureController extends Controller
 
     public function setAdmins($structure, $structure_body_number)
     {
-        $tree = [2, 3
-//            ,
-//            4,5,6,7,8
-        ];
+        $tree = [2, 3, 4, 5, 6, 7, 8];
         $tree = json_encode($tree);
         $body_structure = new StructureBody();
         $body_structure->binary_structure_id = $structure->id;
@@ -678,22 +675,20 @@ class BinaryStructureController extends Controller
 
         $user_id_2 = sprintf("%s_%s", 2, $new_user_number);
         $user_id_3 = sprintf("%s_%s", 3, $new_user_number);
-        #todo
-//        $user_id_4 = sprintf("%s_%s", 4, $new_user_number);
-//        $user_id_5 = sprintf("%s_%s", 5, $new_user_number);
-//        $user_id_6 = sprintf("%s_%s", 6, $new_user_number);
-//        $user_id_7 = sprintf("%s_%s", 7, $new_user_number);
-//        $user_id_8 = sprintf("%s_%s", 8, $new_user_number);
+        $user_id_4 = sprintf("%s_%s", 4, $new_user_number);
+        $user_id_5 = sprintf("%s_%s", 5, $new_user_number);
+        $user_id_6 = sprintf("%s_%s", 6, $new_user_number);
+        $user_id_7 = sprintf("%s_%s", 7, $new_user_number);
+        $user_id_8 = sprintf("%s_%s", 8, $new_user_number);
 
         $tree = [
             $user_id_2,
             $user_id_3,
-            #todo
-//            $user_id_4,
-//            $user_id_5,
-//            $user_id_6,
-//            $user_id_7,
-//            $user_id_8,
+            $user_id_4,
+            $user_id_5,
+            $user_id_6,
+            $user_id_7,
+            $user_id_8,
         ];
         $tree = json_encode($tree);
         $body_structure = new StructureBody();
