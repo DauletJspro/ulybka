@@ -198,7 +198,7 @@ class BinaryStructureController extends Controller
 
         if ($tree == NULL) {
             $this->set_root($user_id, $structure, $from_structure, $body_structure_number, $parent_number);
-            $parent = explode("_", $user_id);
+            $parent = (int) explode("_", $user_id);
             $user_id = $parent[0];
             $this->to_next_structure($user_id, $packet_id, $structure, $from_structure, $user_packet_id, $body_structure_number, $parent_number);
             return true;
@@ -621,16 +621,16 @@ class BinaryStructureController extends Controller
             $body_structure = $this->setAdmins($structure, $structure_body_number);
         }
 
-        if ($copy_structure) {
-
-            if (isset($from_structure) && $from_structure->id == BinaryStructure::THIRD_STRUCTURE) {
-                $new_user_number = ($structure_body_number - 1) * 2;
-            } elseif (isset($from_structure) && $from_structure->id == BinaryStructure::FOURTH_STRUCTURE) {
-                $new_user_number = (($structure_body_number - 1) * 2) + 1;
-            }
-
-            $user_id = sprintf("%s_%s", $user_id, $new_user_number);
-        }
+//        if ($copy_structure) {
+//
+//            if (isset($from_structure) && $from_structure->id == BinaryStructure::THIRD_STRUCTURE) {
+//                $new_user_number = ($structure_body_number - 1) * 2;
+//            } elseif (isset($from_structure) && $from_structure->id == BinaryStructure::FOURTH_STRUCTURE) {
+//                $new_user_number = (($structure_body_number - 1) * 2) + 1;
+//            }
+//
+//            $user_id = sprintf("%s_%s", $user_id, $new_user_number);
+//        }
 
         $tree = json_decode($body_structure->tree_representation);
 //        if (!in_array($user_id, $tree)) {
