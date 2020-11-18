@@ -198,8 +198,8 @@ class BinaryStructureController extends Controller
 
         if ($tree == NULL) {
             $this->set_root($user_id, $structure, $from_structure, $body_structure_number, $parent_number);
-            $parent = (int) explode("_", $user_id);
-            $user_id = $parent[0];
+            $parent = explode("_", $user_id);
+            $user_id = (int) $parent[0];
             $this->to_next_structure($user_id, $packet_id, $structure, $from_structure, $user_packet_id, $body_structure_number, $parent_number);
             return true;
         }
