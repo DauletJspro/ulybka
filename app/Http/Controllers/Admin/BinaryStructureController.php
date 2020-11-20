@@ -199,7 +199,7 @@ class BinaryStructureController extends Controller
         if ($tree == NULL) {
             $this->set_root($user_id, $structure, $from_structure, $body_structure_number, $parent_number);
             $parent = explode("_", $user_id);
-            $user_id = (int) $parent[0];
+            $user_id = (int)$parent[0];
             $this->to_next_structure($user_id, $packet_id, $structure, $from_structure, $user_packet_id, $body_structure_number, $parent_number);
             return true;
         }
@@ -207,7 +207,7 @@ class BinaryStructureController extends Controller
         if ($copy_structure) {
             $tree = $this->set_child_to_copy_structure($structure, $from_structure, $user_id, 0, $body_structure, $parent_number);
         } else {
-            $tree = $this->set_child($structure, $user_id, 0, $body_structure);
+            $tree = $this->set_child($structure, $user_id, $body_structure);
         }
 
 
@@ -227,6 +227,8 @@ class BinaryStructureController extends Controller
 
         $user_idx = $tree ? array_search($user_id, array_values($tree)) : null;
         if (!$user_idx) {
+            var_dump($user_id);
+            die();
             return true;
         }
 
@@ -357,35 +359,66 @@ class BinaryStructureController extends Controller
     }
 
     public
-    function set_child($structure, $user_id, $next_parent_counter = 0, $body_structure)
+    function set_child($structure, $user_id, $body_structure)
     {
         $tree = json_decode($body_structure->tree_representation);
-        $parents = $this->get_all_parents($user_id);
-        $parents = $this->correct_parents($tree, $parents);
+        $user = Users::where(['user_id' => $user_id])->first();
+        $parent = Users::where(['user_id' => $user->recommend_user_id])->first();
+        $parent_id = $parent->user_id;
 
-        if (count($parents) && !in_array($user_id, $tree)) {
-            $exist = in_array($parents[$next_parent_counter], $tree);
-            if (!$exist) {
-                $this->set_child($structure, $user_id, $next_parent_counter + 1, $body_structure);
-            } else {
-                $check = $this->check_free_position($parents[$next_parent_counter], $tree);
+        $child_in_structure = $this->get_all_child($tree, [array_search($parent_id, $tree)]);
 
-                if (!$check) {
-                    $user_child = $this->all_child_from_user_by_parent_id($parents[$next_parent_counter], null);
-                    $user_child = $this->correct_child($tree, $user_child, $body_structure);
-                    $tree = $this->set_by_user_child($user_child, $tree, $user_id, $body_structure);
-                    return $tree;
-                } else {
-                    if (!in_array($user_id, $tree)) {
-                        $tree = $this->add_child($check['to_place_idx'], $tree, $user_id);
-                        $body_structure->tree_representation = json_encode($tree);
-                        $body_structure->save();
-                        return $tree;
-                    }
-                }
+        foreach ($child_in_structure as $key => $item) {
+            $check = $this->check_free_position($item, $tree);
+            if ($check) {
+                $tree = $this->add_child($check['to_place_idx'], $tree, $user_id);
+                $body_structure->tree_representation = json_encode($tree);
+                $body_structure->save();
+                return $tree;
             }
         }
         return [];
+    }
+
+    public function get_all_child($tree, $parents_idx = [], $array = [])
+    {
+        $bool = true;
+        foreach ($parents_idx as $parent_idx) {
+            $left_child_idx = $this->get_left_child_idx($parent_idx);
+            $right_child_idx = $this->get_right_child_idx($parent_idx);
+            if (!in_array($tree[$parent_idx], $array)
+                && isset($tree[$parent_idx])
+                && $tree[$parent_idx] != 0) {
+                $array[$parent_idx] = $tree[$parent_idx];
+                $bool = false;
+            }
+            if (!in_array($tree[$left_child_idx], $array)
+                && isset($tree[$left_child_idx])
+                && $tree[$left_child_idx] != 0) {
+                $array[$left_child_idx] = $tree[$left_child_idx];
+                $bool = false;
+            }
+            if (!in_array($tree[$right_child_idx], $array)
+                && isset($tree[$right_child_idx])
+                && $tree[$right_child_idx] != 0) {
+                $array[$right_child_idx] = $tree[$right_child_idx];
+                $bool = false;
+            }
+        }
+        $parents_idx = [];
+        foreach ($array as $item) {
+            array_push($parents_idx, array_search($item, $tree));
+        }
+        sort($parents_idx);
+        if ($bool) {
+            return ($array);
+        } else {
+            $this->get_all_child($tree, $parents_idx, $array);
+        }
+
+        return $this->get_all_child($tree, $parents_idx, $array);
+
+
     }
 
     public
@@ -444,7 +477,7 @@ class BinaryStructureController extends Controller
     }
 
     public
-    function correct_child($tree, $child, $body_structure)
+    function correct_child($tree, $child)
     {
         $array = [];
 
@@ -644,7 +677,8 @@ class BinaryStructureController extends Controller
     }
 
 
-    public function setAdmins($structure, $structure_body_number)
+    public
+    function setAdmins($structure, $structure_body_number)
     {
         $tree = [2, 3, 4, 5, 6, 7, 8];
         $tree = json_encode($tree);
@@ -657,7 +691,8 @@ class BinaryStructureController extends Controller
         return $body_structure;
     }
 
-    public function setCopyAdmins($structure, $structure_body_number, $parent_number)
+    public
+    function setCopyAdmins($structure, $structure_body_number, $parent_number)
     {
         $new_user_number = $parent_number;
         if (!isset($parent_number) || $parent_number <= 1) {
