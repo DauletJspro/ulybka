@@ -74,7 +74,7 @@ if ($structure_id == 4) {
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 button_form">
                     <div class="col-md-5 col-sm-5 col-xs-5 button_1_div">
                         <label class="label_button_1" for="button1" style="color: transparent;">hola</label>
-                        <button id="button1" class="btn btn-warning">Купить место (7000 тг)</button>
+                        <button id="button1" class="btn btn-warning">Купить место (10000 тг)</button>
                     </div>
                     <div class="col-xl-1col-lg-1 hidden-md hidden-sm hidden-xs"></div>
                     <div class=" col-md-5 col-sm-5 col-xs-5  button_2_div">
