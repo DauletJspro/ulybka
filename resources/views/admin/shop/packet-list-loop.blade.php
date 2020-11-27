@@ -8,7 +8,7 @@ use \App\Models\UserPacket;
 
 @foreach($row->packet as $key => $item)
 
-    @if($item->is_portfolio == 0)
+    @if($item->is_portfolio == 0 && $item->packet_id == \App\Models\Packet::FIRST_TABLE)
 
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
