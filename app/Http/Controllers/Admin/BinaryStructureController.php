@@ -77,72 +77,6 @@ class BinaryStructureController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
     public function get_structure_by_user_id($id, $structure_id = null, $number = 1)
     {
 
@@ -386,20 +320,17 @@ class BinaryStructureController extends Controller
         foreach ($parents_idx as $parent_idx) {
             $left_child_idx = $this->get_left_child_idx($parent_idx);
             $right_child_idx = $this->get_right_child_idx($parent_idx);
-            if (!in_array($tree[$parent_idx], $array)
-                && isset($tree[$parent_idx])
+            if (isset($tree[$parent_idx]) && !in_array($tree[$parent_idx], $array)
                 && $tree[$parent_idx] != 0) {
                 $array[$parent_idx] = $tree[$parent_idx];
                 $bool = false;
             }
-            if (!in_array($tree[$left_child_idx], $array)
-                && isset($tree[$left_child_idx])
+            if (isset($tree[$left_child_idx]) && !in_array($tree[$left_child_idx], $array)
                 && $tree[$left_child_idx] != 0) {
                 $array[$left_child_idx] = $tree[$left_child_idx];
                 $bool = false;
             }
-            if (!in_array($tree[$right_child_idx], $array)
-                && isset($tree[$right_child_idx])
+            if (isset($tree[$right_child_idx]) && !in_array($tree[$right_child_idx], $array)
                 && $tree[$right_child_idx] != 0) {
                 $array[$right_child_idx] = $tree[$right_child_idx];
                 $bool = false;
