@@ -161,8 +161,6 @@ class BinaryStructureController extends Controller
 
         $user_idx = $tree ? array_search($user_id, array_values($tree)) : null;
         if (!$user_idx) {
-            var_dump($user_id);
-            die();
             return true;
         }
 
