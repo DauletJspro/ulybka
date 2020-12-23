@@ -13,7 +13,7 @@ class Check extends Seeder
     public function run()
     {
         try {
-            $body_structure = \App\Models\StructureBody::where(['id' => 2])->first();
+            $body_structure = \App\Models\StructureBody::where(['id' => 3])->first();
             $tree = $body_structure->tree_representation;
             $tree = json_decode($tree);
             $idx = array_search(109, $tree);
