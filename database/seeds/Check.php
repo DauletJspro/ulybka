@@ -22,6 +22,12 @@ class Check extends Seeder
             $body_structure->tree_representation = json_encode($tree);
             $body_structure->save();
 
+            $idx = array_search(106, $tree);
+            $left_child_idx = app(BinaryStructureController::class)->get_left_child_idx($idx);
+            $tree[$left_child_idx] = 370;
+            $body_structure->tree_representation = json_encode($tree);
+            $body_structure->save();
+
 
         } catch (Exception $exception) {
             var_dump($exception->getFile() . ' ' . $exception->getLine() . ' ' . $exception->getMessage());
