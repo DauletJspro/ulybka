@@ -20,9 +20,6 @@ class Check extends Seeder
             $left_child_idx = app(BinaryStructureController::class)->get_left_child_idx($idx);
             $tree[$left_child_idx] = 105;
 
-            $idx = array_search(106, $tree);
-            $left_child_idx = app(BinaryStructureController::class)->get_left_child_idx($idx);
-            $tree[$left_child_idx] = 370;
 
             $body_structure->tree_representation = json_encode($tree);
             $body_structure->save();
