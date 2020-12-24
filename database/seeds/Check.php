@@ -13,17 +13,12 @@ class Check extends Seeder
     public function run()
     {
         try {
-            $body_structure = \App\Models\StructureBody::where(['id' => 2])->first();
+            $body_structure = \App\Models\StructureBody::where(['id' => 3])->first();
             $tree = $body_structure->tree_representation;
             $tree = json_decode($tree);
-            $idx = array_search(174, $tree);
-            $left_child_idx = app(BinaryStructureController::class)->get_right_child_idx($idx);
-            $tree[$left_child_idx] = 179;
-
-            $idx = array_search(174, $tree);
+            $idx = array_search(67, $tree);
             $left_child_idx = app(BinaryStructureController::class)->get_left_child_idx($idx);
-            $tree[$left_child_idx] = 178;
-
+            $tree[$left_child_idx] = 375;
 
             $body_structure->tree_representation = json_encode($tree);
             $body_structure->save();
