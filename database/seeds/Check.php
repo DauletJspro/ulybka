@@ -16,9 +16,9 @@ class Check extends Seeder
             $body_structure = \App\Models\StructureBody::where(['id' => 3])->first();
             $tree = $body_structure->tree_representation;
             $tree = json_decode($tree);
-            $idx = array_search(67, $tree);
+            $idx = array_search(174, $tree);
             $left_child_idx = app(BinaryStructureController::class)->get_left_child_idx($idx);
-            $tree[$left_child_idx] = 375;
+            $tree[$left_child_idx] = 178;
 
             $body_structure->tree_representation = json_encode($tree);
             $body_structure->save();
