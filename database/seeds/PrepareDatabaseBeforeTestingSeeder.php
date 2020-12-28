@@ -17,6 +17,7 @@ class PrepareDatabaseBeforeTestingSeeder extends Seeder
             $user->user_money = 0;
             $user->product_balance = 0;
             $user->status_id = 0;
+            $user->password = \Illuminate\Support\Facades\Hash::make('123456');
             $user->save();
         }
     }
