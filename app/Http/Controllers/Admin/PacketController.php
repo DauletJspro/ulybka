@@ -9,6 +9,7 @@ use App\Models\Currency;
 use App\Models\Fond;
 use App\Models\Operation;
 use App\Models\Packet;
+use App\Models\TreeImplementation;
 use App\Models\UserOperation;
 use App\Models\UserPacket;
 use App\Models\Users;
@@ -432,10 +433,11 @@ class PacketController extends Controller
         $userPacket->queue_start_position = ($max_queue_start_position) ? ($max_queue_start_position + 1) : 1;
         if ($userPacket->save()) {
             Users::where('user_id', $userPacket->user_id)->update(['product_balance' => $userPacket->packet_price]);
-            app(BinaryStructureController::class)->to_next_structure($userPacket->user_id, $userPacket->packet_id, null, $userPacket->user_packet_id);
             $user = Users::get_user($userPacket->user_id);
-            $packet = Packet::where(['packet_id' => $userPacket->packet_id])->first();
-            $this->qualificationUp($packet, $user);
+//            app(BinaryStructureController::class)->to_next_structure($userPacket->user_id, $userPacket->packet_id, null, $userPacket->user_packet_id);
+            app(TreeImplementation::class)->firstStructure($user->user_id, 1);
+//            $packet = Packet::where(['packet_id' => $userPacket->packet_id])->first();
+//            $this->qualificationUp($packet, $user);
         }
 
         return [

@@ -6,7 +6,6 @@ use App\Http\Helpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
-use DB;
 
 class Packet extends Model
 {
@@ -27,15 +26,34 @@ class Packet extends Model
     {
         return [
             self::FIRST_TABLE,
-            self::SECOND_TABLE,
-            self::THIRD_TABLE,
-            self::FOURTH_TABLE,
-            self::FIFTH_TABLE,
         ];
     }
 
     public function userPacket()
     {
         $this->hasMany('App\Models\UserPacket');
+    }
+
+    public static function getPacketIdByBinaryStructure($binaryStructureId)
+    {
+        switch ($binaryStructureId) {
+            case BinaryStructure::FIRST_STRUCTURE:
+                $packetId = Packet::FIRST_TABLE;
+                break;
+            case BinaryStructure::SECOND_STRUCTURE:
+                $packetId = Packet::SECOND_TABLE;
+                break;
+            case BinaryStructure::THIRD_STRUCTURE:
+                $packetId = Packet::THIRD_TABLE;
+                break;
+            case BinaryStructure::FOURTH_STRUCTURE:
+                $packetId = Packet::FOURTH_TABLE;
+                break;
+            case BinaryStructure::FIFTH_STRUCTURE:
+                $packetId = Packet::FIFTH_TABLE;
+                break;
+        }
+
+        return $packetId;
     }
 }

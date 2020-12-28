@@ -41,6 +41,26 @@ class Users extends Model implements AuthenticatableContract
         return Carbon::parse($val);
     }
 
+    public static function parentsByUserId($user_id)
+    {
+        $parentIds = [];
+        $user = Users::where('user_id', $user_id)->first();
+        $parent = Users::where('user_id', $user->recommend_user_id)->first();
+
+        while ($parent) {
+            // 1 = admin
+            if ($parent->user_id == 1) {
+                break;
+            }
+
+            $parentIds[] = $parent->user_id;
+
+            $parent = Users::where('user_id', $parent->recommend_user_id)->first();
+        }
+
+        return $parentIds;
+    }
+
     public static function get_user($id)
     {
         $id = (int)$id;
