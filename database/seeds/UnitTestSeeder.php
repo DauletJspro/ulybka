@@ -12,20 +12,20 @@ class UnitTestSeeder extends Seeder
     public function run()
     {
         try {
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(11));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(10));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(12));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(16));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(14));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(15));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(17));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(18));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(19));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(20));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(21));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(22));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(23));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(24));
+            (app(\App\Models\TreeImplementation::class)->secondStructure(11));
+            (app(\App\Models\TreeImplementation::class)->secondStructure(10));
+            (app(\App\Models\TreeImplementation::class)->secondStructure(12));
+            (app(\App\Models\TreeImplementation::class)->secondStructure(16));
+            (app(\App\Models\TreeImplementation::class)->secondStructure(14));
+            (app(\App\Models\TreeImplementation::class)->secondStructure(15));
+            (app(\App\Models\TreeImplementation::class)->secondStructure(17));
+            (app(\App\Models\TreeImplementation::class)->secondStructure(18));
+            (app(\App\Models\TreeImplementation::class)->secondStructure(19));
+            (app(\App\Models\TreeImplementation::class)->secondStructure(20));
+            (app(\App\Models\TreeImplementation::class)->secondStructure(21));
+            (app(\App\Models\TreeImplementation::class)->secondStructure(22));
+            (app(\App\Models\TreeImplementation::class)->secondStructure(23));
+            (app(\App\Models\TreeImplementation::class)->secondStructure(24));
         } catch (Exception $exception) {
             var_dump($exception->getFile() . ' / ' . $exception->getLine() . ' / ' . $exception->getMessage());
         }

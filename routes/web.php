@@ -213,6 +213,9 @@ Route::group([
     ], function () {
         Route::get('show', 'BinaryStructureController@index')->name('binary_structure.show');
         Route::post('get/user_id', 'BinaryStructureController@find_by_id')->name('binary_structure.get_by_user_id');
+        Route::post('replace', 'BinaryStructureController@replace')->name('binary_structure.replace');
+        Route::get('replace/form', 'BinaryStructureController@replace_form')->name('binary_structure.replace_form');
+
     });
 
     Route::resource('instagram', 'InstagramController');
