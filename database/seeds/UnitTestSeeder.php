@@ -12,20 +12,20 @@ class UnitTestSeeder extends Seeder
     public function run()
     {
         try {
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(11));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(10));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(12));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(16));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(14));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(15));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(17));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(18));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(19));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(20));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(21));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(22));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(23));
-            (app(\App\Models\TreeImplementation::class)->fourthStructure(24));
+            (app(\App\Models\TreeImplementation::class)->thirdStructure(11,1,true));
+            (app(\App\Models\TreeImplementation::class)->thirdStructure(10,1,true));
+            (app(\App\Models\TreeImplementation::class)->thirdStructure(12,1,true));
+            (app(\App\Models\TreeImplementation::class)->thirdStructure(16,1,true));
+            (app(\App\Models\TreeImplementation::class)->thirdStructure(14,1,true));
+            (app(\App\Models\TreeImplementation::class)->thirdStructure(15,1,true));
+            (app(\App\Models\TreeImplementation::class)->thirdStructure(17,1,true));
+            (app(\App\Models\TreeImplementation::class)->thirdStructure(18,1,true));
+            (app(\App\Models\TreeImplementation::class)->thirdStructure(19,1,true));
+            (app(\App\Models\TreeImplementation::class)->thirdStructure(20,1,true));
+            (app(\App\Models\TreeImplementation::class)->thirdStructure(21,1,true));
+            (app(\App\Models\TreeImplementation::class)->thirdStructure(22,1,true));
+            (app(\App\Models\TreeImplementation::class)->thirdStructure(23,1,true));
+            (app(\App\Models\TreeImplementation::class)->thirdStructure(24,1,true));
         } catch (Exception $exception) {
             var_dump($exception->getFile() . ' / ' . $exception->getLine() . ' / ' . $exception->getMessage());
         }

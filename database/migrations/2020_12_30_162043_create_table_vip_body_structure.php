@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnsStructureType extends Migration
+class CreateTableVipBodyStructure extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class AddColumnsStructureType extends Migration
      */
     public function up()
     {
-        Schema::table('binary_structures', function (Blueprint $table) {
-            $table->integer('view_type')->after('type');
-            $table->integer('structure_body_id')->after('view_type');
+        Schema::create('vip_structure_body', function (Blueprint $table) {
+            $table->increments('id');
+            $table->json('tree_representation')->nullable();
+            $table->integer('binary_structure_id');
+            $table->integer('number')->default(1);
+            $table->timestamps();
         });
     }
 

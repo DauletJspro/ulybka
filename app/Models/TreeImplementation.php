@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class TreeImplementation extends Model
 {
-    public function firstStructure($user_id, $number = 1)
+
+    public function firstStructure($user_id, $number = 1, $isVip = false)
     {
         try {
-            $structureBody = $this->initStructureBody(BinaryStructure::FIRST_STRUCTURE, $number);
+            $binaryStructureId = $this->getBinaryStructureId(BinaryStructure::FIRST_STRUCTURE, $isVip);
+
+            $structureBody = $this->initStructureBody($binaryStructureId, $number, $isVip);
+
             $result = $this->setUserToTree($structureBody, $user_id);
 
             if (!$result['success']) {
@@ -25,14 +29,15 @@ class TreeImplementation extends Model
             $structureBody = $result['data'];
             $result = $this->checkParent($user_id, $structureBody);
 
-            if ($result['parentToNextTree'] && $structureBody = $this->secondStructure($result['parentId'], $number)) {
+            if ($result['parentToNextTree'] && $structureBody = $this->secondStructure($result['parentId'], $number, $isVip)) {
                 Operation::recordUpToNextTree($result['parentId'], $number, $structureBody);
             }
             return [
                 'success' => true,
                 'message' => null,
             ];
-        } catch (\Exception $exception) {
+        } catch
+        (\Exception $exception) {
             $message = sprintf('Ошибка %s', $exception->getFile() . ' / ' . $exception->getLine() . ' / ' . $exception->getMessage());
             return [
                 'success' => false,
@@ -42,29 +47,30 @@ class TreeImplementation extends Model
 
     }
 
-    public function secondStructure($user_id, $number = 1)
+    public function secondStructure($user_id, $number = 1, $isVip = false)
     {
-        $structureBody = $this->initStructureBody(BinaryStructure::SECOND_STRUCTURE, $number);
+        $binaryStructureId = $this->getBinaryStructureId(BinaryStructure::SECOND_STRUCTURE, $isVip);
+        $structureBody = $this->initStructureBody($binaryStructureId, $number, $isVip);
 
         $result = $this->setUserToTree($structureBody, $user_id);
 
-        # TODO make correct this place
         if (!$result['success']) {
             return false;
         }
         $structureBody = $result['data'];
         $result = $this->checkParent($user_id, $structureBody);
 
-        if ($result['parentToNextTree'] && $this->thirdStructure($result['parentId'], $number)) {
+        if ($result['parentToNextTree'] && $this->thirdStructure($result['parentId'], $number, $isVip)) {
             Operation::recordUpToNextTree($result['parentId'], $number, $structureBody);
         }
 
         return $structureBody;
     }
 
-    public function thirdStructure($user_id, $number = 1)
+    public function thirdStructure($user_id, $number = 1, $isVip = false)
     {
-        $structureBody = $this->initStructureBody(BinaryStructure::THIRD_STRUCTURE, $number);
+        $binaryStructureId = $this->getBinaryStructureId(BinaryStructure::THIRD_STRUCTURE, $isVip);
+        $structureBody = $this->initStructureBody($binaryStructureId, $number, $isVip);
 
         $result = $this->setUserToTree($structureBody, $user_id);
 
@@ -74,12 +80,12 @@ class TreeImplementation extends Model
         $structureBody = $result['data'];
         $result = $this->checkParent($user_id, $structureBody);
 
-        if ($result['parentToNextTree'] && $fourthStructureBody = $this->fourthStructure($result['parentId'], $number)) {
+        if ($result['parentToNextTree'] && $fourthStructureBody = $this->fourthStructure($result['parentId'], $number, $isVip)) {
             Operation::recordUpToNextTree($result['parentId'], $number, $fourthStructureBody);
         }
         if ($result['parentToNextTree']) {
             $number = $number + 1;
-            $resultFromInvestment = $this->firstStructure($result['parentId'], $number);
+            $resultFromInvestment = $this->firstStructure($result['parentId'], $number, $isVip);
             if ($resultFromInvestment['success']) {
                 Operation::recordReinvestment($result['parentId'], $number);
             }
@@ -88,9 +94,10 @@ class TreeImplementation extends Model
         return $structureBody;
     }
 
-    public function fourthStructure($user_id, $number = 1)
+    public function fourthStructure($user_id, $number = 1, $isVip = false)
     {
-        $structureBody = $this->initStructureBody(BinaryStructure::FOURTH_STRUCTURE, $number);
+        $binaryStructureId = $this->getBinaryStructureId(BinaryStructure::FOURTH_STRUCTURE, $isVip);
+        $structureBody = $this->initStructureBody($binaryStructureId, $number, $isVip);
 
         $result = $this->setUserToTree($structureBody, $user_id);
         if (!$result['success']) {
@@ -99,12 +106,12 @@ class TreeImplementation extends Model
         $structureBody = $result['data'];
         $result = $this->checkParent($user_id, $structureBody);
 
-        if ($result['parentToNextTree'] && $fifthStructureBody = $this->fifthStructure($result['parentId'], $number)) {
+        if ($result['parentToNextTree'] && $fifthStructureBody = $this->fifthStructure($result['parentId'], $number, $isVip)) {
             Operation::recordUpToNextTree($result['parentId'], $number, $fifthStructureBody);
         }
         if ($result['parentToNextTree']) {
             $number = $number + 1;
-            $resultFromInvestment = $this->firstStructure($result['parentId'], $number);
+            $resultFromInvestment = $this->firstStructure($result['parentId'], $number, $isVip);
             if ($resultFromInvestment['success']) {
                 Operation::recordReinvestment($result['parentId'], $number);
             }
@@ -113,9 +120,10 @@ class TreeImplementation extends Model
         return $structureBody;
     }
 
-    public function fifthStructure($user_id, $number = 1)
+    public function fifthStructure($user_id, $number = 1, $isVip = false)
     {
-        $structureBody = $this->initStructureBody(BinaryStructure::FIFTH_STRUCTURE, $number);
+        $binaryStructureId = $this->getBinaryStructureId(BinaryStructure::FIFTH_STRUCTURE, $isVip);
+        $structureBody = $this->initStructureBody($binaryStructureId, $number, $isVip);
 
         $result = $this->setUserToTree($structureBody, $user_id);
 
@@ -128,18 +136,15 @@ class TreeImplementation extends Model
         return $structureBody;
     }
 
-    public function initStructureBody($binaryStructureId, $number)
+    public function initStructureBody($binaryStructureId, $number, $isVip = false)
     {
+        $structureBodyObject = $this->getStructureBodyType($isVip);
+        $structureBody = ($structureBodyObject)->getStructureBody($binaryStructureId, $number);
 
-        $structureBody = (new StructureBody)->getStructureBody($binaryStructureId, $number);
+        $BinaryStructureIsExist = isset($structureBody);
 
-        // TODO check checkStructureBodyIsEmpty:  passed
-        $BinaryStructureIsExist = StructureBody::checkStructureBodyIsExist($structureBody);
-
-
-        // TODO check setRootUsersToStructureBody: passed
         if (!$BinaryStructureIsExist) {
-            $structureBody = StructureBody::setRootUsersToStructureBody($binaryStructureId, $number);
+            $structureBody = ($structureBodyObject)->setRootUsersToStructureBody($binaryStructureId, $number);
         }
 
         return $structureBody;
@@ -148,13 +153,11 @@ class TreeImplementation extends Model
     public function checkParent($user_id, $structureBody)
     {
         // check parent has enough child to next tree
-        // TODO check getTreeParentId
         $userPosition = StructureBody::getTreePositionByUserId($user_id, $structureBody);
         $treeParentPosition = (new StructureBody)->getTreeParentId($userPosition, $structureBody);
 
         $treeParentId = StructureBody::getIdByPosition($treeParentPosition, $structureBody);
 
-        // TODO check parentHasEnoughChild passed to 70%;
         $checkParent = StructureBody::parentHasEnoughChild($treeParentPosition, $structureBody);
 
         return [
@@ -164,10 +167,10 @@ class TreeImplementation extends Model
     }
 
 
-    public function setUserToTree($binaryStructureBody, $user_id)
+    public function setUserToTree($structureBody, $user_id)
     {
-        $number = $binaryStructureBody->number;
-        $tree = (new StructureBody)->getStructureBodyTreeRepresentation($binaryStructureBody);
+        $number = $structureBody->number;
+        $tree = (new StructureBody)->getStructureBodyTreeRepresentation($structureBody);
         if ($number == 1) {
             $isUserExistInTree = in_array($user_id, $tree);
             $message = 'Такой пользователь уже существует в системе !';
@@ -178,7 +181,7 @@ class TreeImplementation extends Model
 
 
         if (!$isUserExistInTree) {
-            $position = StructureBody::getPosition($binaryStructureBody, $user_id);
+            $position = StructureBody::getPosition($structureBody, $user_id);
 
             if (!$position) {
                 return [
@@ -192,8 +195,8 @@ class TreeImplementation extends Model
             }
 
             $tree[$position] = $user_id;
-            $binaryStructureBody->tree_representation = json_encode($tree);
-            $binaryStructureBody->save();
+            $structureBody->tree_representation = json_encode($tree);
+            $structureBody->save();
         } else {
             return [
                 'success' => false,
@@ -203,8 +206,27 @@ class TreeImplementation extends Model
         return [
             'success' => true,
             'message' => null,
-            'data' => $binaryStructureBody,
+            'data' => $structureBody,
         ];
+    }
+
+    public function getBinaryStructureId($binaryStructureId, $isVip = false)
+    {
+        if ($isVip) {
+            $binaryStructureId = BinaryStructure::FIFTH_STRUCTURE + $binaryStructureId;
+        }
+        return $binaryStructureId;
+    }
+
+    public function getStructureBodyType($isVip = false)
+    {
+        if ($isVip) {
+            $structureBody = new VipStructureBody();
+        } else {
+            $structureBody = new StructureBody();
+        }
+
+        return $structureBody;
     }
 
 

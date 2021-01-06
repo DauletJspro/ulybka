@@ -18,6 +18,12 @@ class Packet extends Model
     const FOURTH_TABLE = 4;
     const FIFTH_TABLE = 5;
 
+    const FIRST_TABLE_VIP = 6;
+    const SECOND_TABLE_VIP = 7;
+    const THIRD_TABLE_VIP = 8;
+    const FOURTH_TABLE_VIP = 9;
+    const FIFTH_TABLE_VIP = 10;
+
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
@@ -26,6 +32,7 @@ class Packet extends Model
     {
         return [
             self::FIRST_TABLE,
+            self::FIRST_TABLE_VIP,
         ];
     }
 
@@ -51,6 +58,21 @@ class Packet extends Model
                 break;
             case BinaryStructure::FIFTH_STRUCTURE:
                 $packetId = Packet::FIFTH_TABLE;
+                break;
+            case BinaryStructure::SIXTH_STRUCTURE:
+                $packetId = Packet::FIRST_TABLE_VIP;
+                break;
+            case BinaryStructure::SEVENTH_STRUCTURE:
+                $packetId = Packet::SECOND_TABLE_VIP;
+                break;
+            case BinaryStructure::EIGHTH_STRUCTURE:
+                $packetId = Packet::THIRD_TABLE_VIP;
+                break;
+            case BinaryStructure::NINTH_STRUCTURE:
+                $packetId = Packet::FOURTH_TABLE_VIP;
+                break;
+            case BinaryStructure::TENTH_STRUCTURE:
+                $packetId = Packet::FIFTH_TABLE_VIP;
                 break;
         }
 

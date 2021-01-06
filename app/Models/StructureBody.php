@@ -31,7 +31,7 @@ class StructureBody extends Model
         return $tree[$position];
     }
 
-    public function getStructureBodyTreeRepresentation(StructureBody $structureBody)
+    public function getStructureBodyTreeRepresentation($structureBody)
     {
         $tree = json_decode($structureBody->tree_representation);
         return $tree;
@@ -96,7 +96,12 @@ class StructureBody extends Model
             return false;
         }
 
-        if (in_array($structureBody->binary_structure_id, [BinaryStructure::SECOND_STRUCTURE, BinaryStructure::FOURTH_STRUCTURE])) {
+        if (in_array($structureBody->binary_structure_id, [
+            BinaryStructure::SECOND_STRUCTURE,
+            BinaryStructure::FOURTH_STRUCTURE,
+            BinaryStructure::SEVENTH_STRUCTURE,
+            BinaryStructure::NINTH_STRUCTURE
+        ])) {
             return true;
         }
 
@@ -134,10 +139,6 @@ class StructureBody extends Model
         return $position;
     }
 
-    public static function checkStructureBodyIsExist($structureBody)
-    {
-        return isset($structureBody);
-    }
 
     public static function setRootUsersToStructureBody($binaryStructureId, $number)
     {
@@ -167,7 +168,12 @@ class StructureBody extends Model
         }
 
         $countLimit = 2;
-        if (in_array($binaryStructureBody->binary_structure_id, [BinaryStructure::SECOND_STRUCTURE, BinaryStructure::FOURTH_STRUCTURE])) {
+        if (in_array($binaryStructureBody->binary_structure_id, [
+            BinaryStructure::SECOND_STRUCTURE,
+            BinaryStructure::FOURTH_STRUCTURE,
+            BinaryStructure::SEVENTH_STRUCTURE,
+            BinaryStructure::NINTH_STRUCTURE
+        ])) {
             $countLimit = 1;
         }
 
