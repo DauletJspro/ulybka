@@ -17,6 +17,11 @@ class BinaryStructure extends Model
     const THIRD_STRUCTURE = 3;
     const FOURTH_STRUCTURE = 4;
     const FIFTH_STRUCTURE = 5;
+    const SIXTH_STRUCTURE = 6;
+    const SEVENTH_STRUCTURE = 7;
+    const EIGHTH_STRUCTURE = 8;
+    const NINTH_STRUCTURE = 9;
+    const TENTH_STRUCTURE = 10;
 
     const VIEW_TYPE_SIMPLE = 1;
     const VIEW_TYPE_ONLY_TRIPLE = 2;
@@ -116,8 +121,6 @@ class BinaryStructure extends Model
         $right_child_idx = ($parent_idx * 2) + 2;
         return $right_child_idx;
     }
-
-
 
 
 }
