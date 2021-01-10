@@ -212,7 +212,7 @@ class StructureBody extends Model
         }
         $parentsPosition = [];
         foreach ($array as $user_id) {
-            array_push($parentsPosition, array_search($user_id, array_filter($tree)));
+            array_push($parentsPosition, $this->fast_array_search($user_id, array_filter($tree)));
         }
         #TODO sort correctly
         sort($parentsPosition);
@@ -222,6 +222,11 @@ class StructureBody extends Model
             $this->getChildInTree($tree, $parentsPosition, $array);
         }
         return $this->getChildInTree($tree, $parentsPosition, $array);
+    }
+
+    function fast_array_search($needle, $haystack)
+    {
+        return array_flip($haystack)[$needle];
     }
 
     function sendRewardToParent($childPosition, $parentPosition, $packetId, $counter, $structureBody)
