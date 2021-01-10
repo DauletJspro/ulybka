@@ -212,7 +212,7 @@ class StructureBody extends Model
         }
         $parentsPosition = [];
         foreach ($array as $user_id) {
-            array_push($parentsPosition, array_search($user_id, $tree));
+            array_push($parentsPosition, array_search($user_id, array_filter($tree)));
         }
         #TODO sort correctly
         sort($parentsPosition);
