@@ -25,44 +25,33 @@ class StructureBody extends Model
         return $binaryStructureBody;
     }
 
-    public static function getIdByPosition($position, $structureBody)
+    public static function getIdByPosition($position, $tree)
     {
-        $tree = json_decode($structureBody->tree_representation);
         return $tree[$position];
     }
 
-    public function getStructureBodyTreeRepresentation($structureBody)
+    public static function getStructureBodyTreeRepresentation($structureBody)
     {
         $tree = json_decode($structureBody->tree_representation);
         return $tree;
     }
 
-    public static function getPosition($structureBody, $user_id)
+    public static function getPosition($user_id, $tree)
     {
-        $tree = json_decode($structureBody->tree_representation);
         $parentsId = Users::parentsByUserId($user_id);
 
         foreach ($parentsId as $parentId) {
             if (in_array($parentId, $tree)) {
-                $childInTreeByParentId = (new StructureBody)->getChildInTree($tree, [array_search($parentId, $tree)]);
-
-
-                foreach ($childInTreeByParentId as $childId) {
-                    $position = (new StructureBody)->checkFreePosition($childId, $structureBody);
-                    if ($position) {
-                        return $position;
-                    }
-                }
-                return false;
-
+                $position = (new StructureBody)->getChildInTree($tree, [array_search($parentId, $tree)]);
+                return $position;
             }
         }
+        return false;
     }
 
     public
-    function checkFreePosition($userId, $structureBody)
+    function checkFreePosition($userId, $tree)
     {
-        $tree = $this->getStructureBodyTreeRepresentation($structureBody);
         $parentPosition = $position = array_search($userId, $tree);
         $leftChildPosition = $this->get_left_child_idx($parentPosition);
         $rightChildPosition = $this->get_right_child_idx($parentPosition);
@@ -84,10 +73,8 @@ class StructureBody extends Model
         }
     }
 
-    public static function parentHasEnoughChild($parentPosition, $structureBody)
+    public static function parentHasEnoughChild($parentPosition, $structureBody, $tree)
     {
-        $tree = (new StructureBody)->getStructureBodyTreeRepresentation($structureBody);
-
         $leftChildPosition = (new StructureBody)->get_left_child_idx($parentPosition);
         $rightChildPosition = (new StructureBody)->get_right_child_idx($parentPosition);
 
@@ -126,9 +113,8 @@ class StructureBody extends Model
 
     }
 
-    public static function getTreePositionByUserId($userId, $structureBody)
+    public static function getTreePositionByUserId($userId, $structureBody, $tree)
     {
-        $tree = json_decode($structureBody->tree_representation);
         $position = array_search($userId, $tree);
         if ($structureBody->number > 1 && in_array($userId, $tree) && array_count_values($tree)[$userId] >= 2) {
             $tempTree = $tree;
@@ -190,37 +176,41 @@ class StructureBody extends Model
 
     public function getChildInTree($tree, $parentsPosition = [], $array = [])
     {
-        $bool = true;
         foreach ($parentsPosition as $parentPosition) {
             $left_child_idx = $this->get_left_child_idx($parentPosition);
             $right_child_idx = $this->get_right_child_idx($parentPosition);
             if (isset($tree[$parentPosition]) && !in_array($tree[$parentPosition], $array)
                 && $tree[$parentPosition] != 0) {
                 $array[$parentPosition] = $tree[$parentPosition];
-                $bool = false;
             }
             if (isset($tree[$left_child_idx]) && !in_array($tree[$left_child_idx], $array)
                 && $tree[$left_child_idx] != 0) {
                 $array[$left_child_idx] = $tree[$left_child_idx];
-                $bool = false;
             }
             if (isset($tree[$right_child_idx]) && !in_array($tree[$right_child_idx], $array)
                 && $tree[$right_child_idx] != 0) {
                 $array[$right_child_idx] = $tree[$right_child_idx];
-                $bool = false;
             }
         }
+
         $parentsPosition = [];
         foreach ($array as $user_id) {
             array_push($parentsPosition, $this->fast_array_search($user_id, $tree));
         }
         #TODO sort correctly
         sort($parentsPosition);
-        if ($bool) {
-            return ($array);
-        } else {
-            $this->getChildInTree($tree, $parentsPosition, $array);
+
+        foreach ($array as $user_id) {
+            if ($position = $this->checkFreePosition($user_id, $tree)) {
+                return $position;
+            }
         }
+//        if ($bool) {
+//            return $array;
+//        } else {
+        $this->getChildInTree($tree, $parentsPosition, $array);
+//        }
+
         return $this->getChildInTree($tree, $parentsPosition, $array);
     }
 

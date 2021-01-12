@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Psy\Util\Json;
 
 class TreeImplementation extends Model
 {
@@ -27,7 +28,8 @@ class TreeImplementation extends Model
             Operation::recordUpToNextTree($user_id, $number, $structureBody);
 
             $structureBody = $result['data'];
-            $result = $this->checkParent($user_id, $structureBody);
+            $tree = $result['tree'];
+            $result = $this->checkParent($user_id, $structureBody, $tree);
 
             if ($result['parentToNextTree'] && $structureBody = $this->secondStructure($result['parentId'], $number, $isVip)) {
                 Operation::recordUpToNextTree($result['parentId'], $number, $structureBody);
@@ -58,7 +60,8 @@ class TreeImplementation extends Model
             return false;
         }
         $structureBody = $result['data'];
-        $result = $this->checkParent($user_id, $structureBody);
+        $tree = $result['tree'];
+        $result = $this->checkParent($user_id, $structureBody, $tree);
 
         if ($result['parentToNextTree'] && $this->thirdStructure($result['parentId'], $number, $isVip)) {
             Operation::recordUpToNextTree($result['parentId'], $number, $structureBody);
@@ -78,7 +81,8 @@ class TreeImplementation extends Model
             return false;
         }
         $structureBody = $result['data'];
-        $result = $this->checkParent($user_id, $structureBody);
+        $tree = $result['tree'];
+        $result = $this->checkParent($user_id, $structureBody, $tree);
 
         if ($result['parentToNextTree'] && $fourthStructureBody = $this->fourthStructure($result['parentId'], $number, $isVip)) {
             Operation::recordUpToNextTree($result['parentId'], $number, $fourthStructureBody);
@@ -104,7 +108,8 @@ class TreeImplementation extends Model
             return false;
         }
         $structureBody = $result['data'];
-        $result = $this->checkParent($user_id, $structureBody);
+        $tree = $result['tree'];
+        $result = $this->checkParent($user_id, $structureBody, $tree);
 
         if ($result['parentToNextTree'] && $fifthStructureBody = $this->fifthStructure($result['parentId'], $number, $isVip)) {
             Operation::recordUpToNextTree($result['parentId'], $number, $fifthStructureBody);
@@ -150,15 +155,15 @@ class TreeImplementation extends Model
         return $structureBody;
     }
 
-    public function checkParent($user_id, $structureBody)
+    public function checkParent($user_id, $structureBody, $tree)
     {
         // check parent has enough child to next tree
-        $userPosition = StructureBody::getTreePositionByUserId($user_id, $structureBody);
+        $userPosition = StructureBody::getTreePositionByUserId($user_id, $structureBody, $tree);
         $treeParentPosition = (new StructureBody)->getTreeParentId($userPosition, $structureBody);
 
-        $treeParentId = StructureBody::getIdByPosition($treeParentPosition, $structureBody);
+        $treeParentId = StructureBody::getIdByPosition($treeParentPosition, $tree);
 
-        $checkParent = StructureBody::parentHasEnoughChild($treeParentPosition, $structureBody);
+        $checkParent = StructureBody::parentHasEnoughChild($treeParentPosition, $structureBody, $tree);
 
         return [
             'parentToNextTree' => $checkParent,
@@ -181,7 +186,9 @@ class TreeImplementation extends Model
 
 
         if (!$isUserExistInTree) {
-            $position = StructureBody::getPosition($structureBody, $user_id);
+
+            $position = StructureBody::getPosition($user_id, $tree);
+
 
             if (!$position) {
                 return [
@@ -195,7 +202,7 @@ class TreeImplementation extends Model
             }
 
             $tree[$position] = $user_id;
-            $structureBody->tree_representation = json_encode($tree);
+            $structureBody->tree_representation = JSON::encode($tree);
             $structureBody->save();
         } else {
             return [
@@ -207,6 +214,7 @@ class TreeImplementation extends Model
             'success' => true,
             'message' => null,
             'data' => $structureBody,
+            'tree' => $tree
         ];
     }
 
