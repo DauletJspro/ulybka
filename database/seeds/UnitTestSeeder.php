@@ -12,26 +12,28 @@ class UnitTestSeeder extends Seeder
     public function run()
     {
 
-        $structureBody = (new App\Models\StructureBody)->getStructureBody(1, 1);
-        $tree = json_decode($structureBody->tree_representation);
-        var_dump(array_flip(array_filter($tree))[192]);
-
-
+        $structure = \App\Models\StructureBody::where(['binary_structure_id' => \App\Models\BinaryStructure::FIRST_STRUCTURE])
+            ->where(['number' => 1])->first();
+        $tree = json_decode($structure->tree_representation);
+        $position = array_search(1330, $tree);
+        $tree[$position] = 0;
+        $structure->tree_representation = json_encode($tree);
+        $structure->save();
 //        try {
-//            (app(\App\Models\TreeImplementation::class)->thirdStructure(11,1,true));
-//            (app(\App\Models\TreeImplementation::class)->thirdStructure(10,1,true));
-//            (app(\App\Models\TreeImplementation::class)->thirdStructure(12,1,true));
-//            (app(\App\Models\TreeImplementation::class)->thirdStructure(16,1,true));
-//            (app(\App\Models\TreeImplementation::class)->thirdStructure(14,1,true));
-//            (app(\App\Models\TreeImplementation::class)->thirdStructure(15,1,true));
-//            (app(\App\Models\TreeImplementation::class)->thirdStructure(17,1,true));
-//            (app(\App\Models\TreeImplementation::class)->thirdStructure(18,1,true));
-//            (app(\App\Models\TreeImplementation::class)->thirdStructure(19,1,true));
-//            (app(\App\Models\TreeImplementation::class)->thirdStructure(20,1,true));
-//            (app(\App\Models\TreeImplementation::class)->thirdStructure(21,1,true));
-//            (app(\App\Models\TreeImplementation::class)->thirdStructure(22,1,true));
-//            (app(\App\Models\TreeImplementation::class)->thirdStructure(23,1,true));
-//            (app(\App\Models\TreeImplementation::class)->thirdStructure(24,1,true));
+//            (app(\App\Models\TreeImplementation::class)->firstStructure(11,1,false));
+//            (app(\App\Models\TreeImplementation::class)->firstStructure(10,1,false));
+//            (app(\App\Models\TreeImplementation::class)->firstStructure(12,1,false));
+//            (app(\App\Models\TreeImplementation::class)->firstStructure(16,1,false));
+//            (app(\App\Models\TreeImplementation::class)->firstStructure(14,1,false));
+//            (app(\App\Models\TreeImplementation::class)->firstStructure(15,1,false));
+//            (app(\App\Models\TreeImplementation::class)->firstStructure(17,1,false));
+//            (app(\App\Models\TreeImplementation::class)->firstStructure(18,1,false));
+//            (app(\App\Models\TreeImplementation::class)->firstStructure(19,1,false));
+//            (app(\App\Models\TreeImplementation::class)->firstStructure(20,1,false));
+//            (app(\App\Models\TreeImplementation::class)->firstStructure(21,1,false));
+//            (app(\App\Models\TreeImplementation::class)->firstStructure(22,1,false));
+//            (app(\App\Models\TreeImplementation::class)->firstStructure(23,1,false));
+//            (app(\App\Models\TreeImplementation::class)->firstStructure(24,1,false));
 //        } catch (Exception $exception) {
 //            var_dump($exception->getFile() . ' / ' . $exception->getLine() . ' / ' . $exception->getMessage());
 //        }
