@@ -15,14 +15,16 @@ class UnitTestSeeder extends Seeder
         $structure = \App\Models\StructureBody::where(['binary_structure_id' => \App\Models\BinaryStructure::FIRST_STRUCTURE])
             ->where(['number' => 1])->first();
         $tree = json_decode($structure->tree_representation);
-        $position = array_search(1330, $tree);
-        $tree[$position] = 0;
+        $position1 = array_search(1329, $tree);
+        $position2 = array_search(1330, $tree);
+        $tree[$position1] = 0;
+        $tree[$position2] = 0;
         $structure->tree_representation = json_encode($tree);
         $structure->save();
 //        try {
 //            (app(\App\Models\TreeImplementation::class)->firstStructure(11,1,false));
 //            (app(\App\Models\TreeImplementation::class)->firstStructure(10,1,false));
-//            (app(\App\Models\TreeImplementation::class)->firstStructure(12,1,false));
+//            (app(\App\Models\TreeImplementaktion::class)->firstStructure(12,1,false));
 //            (app(\App\Models\TreeImplementation::class)->firstStructure(16,1,false));
 //            (app(\App\Models\TreeImplementation::class)->firstStructure(14,1,false));
 //            (app(\App\Models\TreeImplementation::class)->firstStructure(15,1,false));
