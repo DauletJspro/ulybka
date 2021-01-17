@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Psy\Util\Json;
+use Illuminate\Support\Facades\Redis;
 
 class TreeImplementation extends Model
 {
@@ -13,9 +13,10 @@ class TreeImplementation extends Model
         try {
             $binaryStructureId = $this->getBinaryStructureId(BinaryStructure::FIRST_STRUCTURE, $isVip);
 
-            $structureBody = $this->initStructureBody($binaryStructureId, $number, $isVip);
+            $this->initStructureBody($binaryStructureId, $number, $isVip);
 
-            $result = $this->setUserToTree($structureBody, $user_id);
+
+            $result = $this->setUserToTree($binaryStructureId, $number, $user_id);
 
             if (!$result['success']) {
                 return
@@ -25,9 +26,11 @@ class TreeImplementation extends Model
                     ];
             }
 
+
+            $structureBody = $structureBody = $result['data'];
+
             Operation::recordUpToNextTree($user_id, $number, $structureBody);
 
-            $structureBody = $result['data'];
             $tree = $result['tree'];
             $result = $this->checkParent($user_id, $structureBody, $tree);
 
@@ -52,9 +55,9 @@ class TreeImplementation extends Model
     public function secondStructure($user_id, $number = 1, $isVip = false)
     {
         $binaryStructureId = $this->getBinaryStructureId(BinaryStructure::SECOND_STRUCTURE, $isVip);
-        $structureBody = $this->initStructureBody($binaryStructureId, $number, $isVip);
+        $this->initStructureBody($binaryStructureId, $number, $isVip);
 
-        $result = $this->setUserToTree($structureBody, $user_id);
+        $result = $this->setUserToTree($binaryStructureId, $number, $user_id);
 
         if (!$result['success']) {
             return false;
@@ -73,9 +76,9 @@ class TreeImplementation extends Model
     public function thirdStructure($user_id, $number = 1, $isVip = false)
     {
         $binaryStructureId = $this->getBinaryStructureId(BinaryStructure::THIRD_STRUCTURE, $isVip);
-        $structureBody = $this->initStructureBody($binaryStructureId, $number, $isVip);
+        $this->initStructureBody($binaryStructureId, $number, $isVip);
 
-        $result = $this->setUserToTree($structureBody, $user_id);
+        $result = $this->setUserToTree($binaryStructureId, $number, $user_id);
 
         if (!$result['success']) {
             return false;
@@ -101,9 +104,9 @@ class TreeImplementation extends Model
     public function fourthStructure($user_id, $number = 1, $isVip = false)
     {
         $binaryStructureId = $this->getBinaryStructureId(BinaryStructure::FOURTH_STRUCTURE, $isVip);
-        $structureBody = $this->initStructureBody($binaryStructureId, $number, $isVip);
+        $this->initStructureBody($binaryStructureId, $number, $isVip);
 
-        $result = $this->setUserToTree($structureBody, $user_id);
+        $result = $this->setUserToTree($binaryStructureId, $number, $user_id);
         if (!$result['success']) {
             return false;
         }
@@ -128,9 +131,9 @@ class TreeImplementation extends Model
     public function fifthStructure($user_id, $number = 1, $isVip = false)
     {
         $binaryStructureId = $this->getBinaryStructureId(BinaryStructure::FIFTH_STRUCTURE, $isVip);
-        $structureBody = $this->initStructureBody($binaryStructureId, $number, $isVip);
+        $this->initStructureBody($binaryStructureId, $number, $isVip);
 
-        $result = $this->setUserToTree($structureBody, $user_id);
+        $result = $this->setUserToTree($binaryStructureId, $number, $user_id);
 
 
         if (!$result['success']) {
@@ -144,22 +147,21 @@ class TreeImplementation extends Model
     public function initStructureBody($binaryStructureId, $number, $isVip = false)
     {
         $structureBodyObject = $this->getStructureBodyType($isVip);
-        $structureBody = ($structureBodyObject)->getStructureBody($binaryStructureId, $number);
 
-        $BinaryStructureIsExist = isset($structureBody);
-
-        if (!$BinaryStructureIsExist) {
-            $structureBody = ($structureBodyObject)->setRootUsersToStructureBody($binaryStructureId, $number);
+        $redis = new Redis();
+        $structureName = BinaryStructure::where(['id' => $binaryStructureId])->first()->type;
+        $data = $redis::zRange($structureName . ':' . $number, 0, -1, 'WITHSCORES');
+        $BinaryStructureIsExist = empty($data);
+        if ($BinaryStructureIsExist) {
+            $structureBodyObject->setRootUsersToStructureBody($binaryStructureId, $number);
         }
-
-        return $structureBody;
     }
 
     public function checkParent($user_id, $structureBody, $tree)
     {
         // check parent has enough child to next tree
         $userPosition = StructureBody::getTreePositionByUserId($user_id, $structureBody, $tree);
-        $treeParentPosition = (new StructureBody)->getTreeParentId($userPosition, $structureBody);
+        $treeParentPosition = (new StructureBody)->getTreeParentId($userPosition, $structureBody, $tree);
 
         $treeParentId = StructureBody::getIdByPosition($treeParentPosition, $tree);
 
@@ -172,10 +174,15 @@ class TreeImplementation extends Model
     }
 
 
-    public function setUserToTree($structureBody, $user_id)
+    public function setUserToTree($binaryStructureId, $number, $user_id)
     {
-        $number = $structureBody->number;
-        $tree = (new StructureBody)->getStructureBodyTreeRepresentation($structureBody);
+        $structureBody = (new StructureBody)->getStructureBody($binaryStructureId, $number);
+
+        $redis = new Redis();
+        $structureName = BinaryStructure::where(['id' => $binaryStructureId])->first()->type;
+        $redis_key = $structureName . ':' . $number;
+        $tree = $redis::zRange($redis_key, 0, -1, 'WITHSCORES');
+
         if ($number == 1) {
             $isUserExistInTree = in_array($user_id, $tree);
             $message = 'Такой пользователь уже существует в системе !';
@@ -183,7 +190,6 @@ class TreeImplementation extends Model
             $isUserExistInTree = in_array($user_id, $tree) && array_count_values($tree)[$user_id] >= 2;
             $message = 'Такой пользователь уже существует в системе дважды !';
         }
-
 
         if (!$isUserExistInTree) {
 
@@ -196,14 +202,10 @@ class TreeImplementation extends Model
                     'message' => 'Система не нашла корректную позицию',
                 ];
             }
-            // fill empty positions by zero
-            for ($i = count($tree); $i < $position; $i++) {
-                $tree[$i] = 0;
-            }
 
             $tree[$position] = $user_id;
-            $structureBody->tree_representation = JSON::encode($tree);
-            $structureBody->save();
+            $redis::zAdd($redis_key, $user_id, $position);
+
         } else {
             return [
                 'success' => false,
@@ -213,8 +215,8 @@ class TreeImplementation extends Model
         return [
             'success' => true,
             'message' => null,
+            'tree' => $tree,
             'data' => $structureBody,
-            'tree' => $tree
         ];
     }
 

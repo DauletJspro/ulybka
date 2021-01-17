@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
 class VipStructureBody extends Model
 {
@@ -35,6 +36,7 @@ class VipStructureBody extends Model
         $structureBody->save();
 
         return $structureBody;
+
     }
 
     public function getStructureBodyTreeRepresentation($structureBody)

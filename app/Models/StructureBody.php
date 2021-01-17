@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
 class StructureBody extends Model
 {
@@ -29,12 +30,7 @@ class StructureBody extends Model
     {
         return $tree[$position];
     }
-
-    public static function getStructureBodyTreeRepresentation($structureBody)
-    {
-        $tree = json_decode($structureBody->tree_representation);
-        return $tree;
-    }
+    
 
     public static function getPosition($user_id, $tree)
     {
@@ -128,17 +124,20 @@ class StructureBody extends Model
 
     public static function setRootUsersToStructureBody($binaryStructureId, $number)
     {
-        $tree = [2, 3, 4, 5, 6, 7, 8];
-        $structureBody = new StructureBody();
-        $structureBody->binary_structure_id = $binaryStructureId;
-        $structureBody->tree_representation = json_encode($tree);
-        $structureBody->number = $number;
-        $structureBody->save();
+        $structureName = BinaryStructure::where(['id' => $binaryStructureId])->first()->type;
 
-        return $structureBody;
+        $redis = new Redis();
+        $tree = [2, 3, 4, 5, 6, 7, 8];
+        $redis_key = $structureName . ':' . $number;
+        foreach ($tree as $key => $item) {
+            $redis::zAdd(($redis_key), $item, $key);
+        }
+
+        $tree = ($redis::zRange($redis_key, 0, -1, 'WITHSCORES'));
+        return $tree;
     }
 
-    public function getTreeParentId($childPosition, $binaryStructureBody, $counter = 0)
+    public function getTreeParentId($childPosition, $binaryStructureBody, $tree, $counter = 0)
     {
         $parentPosition = null;
         if ((($childPosition - 1) % 2) == 0) {
@@ -150,7 +149,7 @@ class StructureBody extends Model
 
         if ($parentPosition != 0 && $binaryStructureBody->view_type != BinaryStructure::VIEW_TYPE_ONLY_TRIPLE) {
             $packetId = Packet::getPacketIdByBinaryStructure($binaryStructureBody->binary_structure_id);
-            $this->sendRewardToParent($childPosition, $parentPosition, $packetId, $counter, $binaryStructureBody);
+            $this->sendRewardToParent($childPosition, $parentPosition, $packetId, $counter, $binaryStructureBody, $tree);
         }
 
         $countLimit = 2;
@@ -169,7 +168,7 @@ class StructureBody extends Model
             return $parentPosition;
         }
 
-        $result = $this->getTreeParentId($parentPosition, $binaryStructureBody, $counter);
+        $result = $this->getTreeParentId($parentPosition, $binaryStructureBody, $tree, $counter);
         return $result;
     }
 
@@ -219,11 +218,10 @@ class StructureBody extends Model
         return array_flip($haystack)[$needle];
     }
 
-    function sendRewardToParent($childPosition, $parentPosition, $packetId, $counter, $structureBody)
+    function sendRewardToParent($childPosition, $parentPosition, $packetId, $counter, $structureBody, $tree)
     {
         $bonus = 0;
         $packet = (Packet::where(['packet_id' => $packetId])->first());
-        $tree = json_decode($structureBody->tree_representation);
         $parentId = $tree[$parentPosition];
         $childId = $tree[$childPosition];
 

@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\TransferFromDBToRedisCommand;
 use App\Models\Fond;
 use App\Models\Operation;
 use App\Models\UserOperation;
@@ -18,8 +19,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        'App\Console\Commands\GlobalBonusBeginOfMonth',
-        'App\Console\Commands\UserPacketSetPaid',
+        TransferFromDBToRedisCommand::class
     ];
 
     /**
@@ -30,8 +30,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('globalBonus:everyMonth')
-            ->everyMinute();
     }
 
     /**

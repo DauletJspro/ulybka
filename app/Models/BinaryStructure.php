@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Redis;
 use PhpParser\Node\Stmt\Label;
 
 class BinaryStructure extends Model
@@ -69,10 +70,13 @@ class BinaryStructure extends Model
     {
         $array = [];
         $user_array = [];
-        $body_structure = StructureBody::where(['binary_structure_id' => $structure->id])
-            ->where(['number' => $number])->first();
-        $tree = json_decode($body_structure->tree_representation);
-        $user_idx = array_search($user_id, array_values($tree));
+
+        $redis = new Redis();
+        $structureName = BinaryStructure::where(['id' => $structure->id])->first()->type;
+        $redis_key = $structureName . ':' . $number;
+        $tree = $redis::zRange($redis_key, 0, -1, 'WITHSCORES');
+
+        $user_idx = array_search($user_id, $tree);
 
         $left_child_idx = self::get_left_child_idx($user_idx);
         $right_child_idx = self::get_right_child_idx($user_idx);
@@ -97,8 +101,11 @@ class BinaryStructure extends Model
         foreach ($idxs as $idx) {
             if (isset($tree[$idx])) {
                 array_push($array, $tree[$idx]);
+            } else {
+                array_push($array, 0);
             }
         }
+
 
         foreach ($array as $key => $user_id) {
             $user = Users::get_user($user_id);

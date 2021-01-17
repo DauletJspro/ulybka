@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Users;
 use Illuminate\Database\Seeder;
 
 class PrepareDatabaseBeforeTestingSeeder extends Seeder
@@ -11,6 +12,10 @@ class PrepareDatabaseBeforeTestingSeeder extends Seeder
      */
     public function run()
     {
+//        $user = Users::where(['user_id' => 1])->first();
+//        $user->password = \Illuminate\Support\Facades\Hash::make('123456');
+//        $user->save();
+
         $users = \App\Models\Users::all();
 
         foreach ($users as $user) {
