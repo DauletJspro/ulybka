@@ -30,7 +30,7 @@ class StructureBody extends Model
     {
         return $tree[$position];
     }
-    
+
 
     public static function getPosition($user_id, $tree)
     {
@@ -124,10 +124,18 @@ class StructureBody extends Model
 
     public static function setRootUsersToStructureBody($binaryStructureId, $number)
     {
-        $structureName = BinaryStructure::where(['id' => $binaryStructureId])->first()->type;
 
-        $redis = new Redis();
         $tree = [2, 3, 4, 5, 6, 7, 8];
+
+        $structureBody = new StructureBody();
+        $structureBody->binary_structure_id = $binaryStructureId;
+        $structureBody->number = $number;
+        $structureBody->tree_representation = json_encode($tree);
+        $structureBody->save();
+
+        $structureName = BinaryStructure::where(['id' => $binaryStructureId])->first()->type;
+        $redis = new Redis();
+
         $redis_key = $structureName . ':' . $number;
         foreach ($tree as $key => $item) {
             $redis::zAdd(($redis_key), $item, $key);
@@ -204,11 +212,7 @@ class StructureBody extends Model
                 return $position;
             }
         }
-//        if ($bool) {
-//            return $array;
-//        } else {
         $this->getChildInTree($tree, $parentsPosition, $array);
-//        }
 
         return $this->getChildInTree($tree, $parentsPosition, $array);
     }
@@ -248,8 +252,17 @@ class StructureBody extends Model
                     'user_money' => $parentUser->user_money + $bonus,
                 ]);
 
-                Operation::recordSendReward($childId, $parentId, $bonus, $structureBody);
+                // send money to payee
+                $moneyToSendPayee = Users::whereIn('user_id', [2000, 2001, 2002])->get();
+                foreach ($moneyToSendPayee as $user) {
+                    $money = $packet_price * (7 / 100);
+                    $user->user_money = $user->user_money + $money;
+                    if ($user->save()) {
+                        Operation::recordSendMoneyToPayee($childId, $user->user_id, $money);
+                    }
+                }
 
+                Operation::recordSendReward($childId, $parentId, $bonus, $structureBody);
                 DB::commit();
             } catch (\Exception $e) {
                 var_dump($e->getMessage());

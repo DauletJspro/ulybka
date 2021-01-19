@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\BinaryStructure;
 use App\Models\StructureBody;
+use App\Models\VipStructureBody;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 
@@ -43,21 +44,33 @@ class TransferFromRedisToDBCommand extends Command
         $structureBody = StructureBody::all();
 
         foreach ($structureBody as $item) {
-            $this->transfer($item->binary_structure_id, $item->number);
+            $this->transfer($item->binary_structure_id, $item->number, false);
+        }
+
+        $structureBodyVip = VipStructureBody::all();
+
+        foreach ($structureBodyVip as $itemVip) {
+            $this->transfer($itemVip->binary_structure_id, $itemVip->number, true);
         }
     }
 
-    public function transfer($binaryStructureId, $number)
+    public function transfer($binaryStructureId, $number, $isVip)
     {
         $redis = new Redis();
         $structureName = BinaryStructure::where(['id' => $binaryStructureId])->first()->type;
+
         $redis_key = $structureName . ':' . $number;
 
         $tree = $redis::zRange($redis_key, 0, -1, 'WITHSCORES');
 
-        if (isset($tree)) {
-            $structureBody = StructureBody::where(['binary_structure_id' => $binaryStructureId])
-                ->where(['number' => $number])->first();
+        if (!empty($tree)) {
+            if ($isVip) {
+                $structureBody = VipStructureBody::where(['binary_structure_id' => $binaryStructureId])
+                    ->where(['number' => $number])->first();
+            } else {
+                $structureBody = StructureBody::where(['binary_structure_id' => $binaryStructureId])
+                    ->where(['number' => $number])->first();
+            }
 
             $structureBody->tree_representation = json_encode($tree);
             $structureBody->save();

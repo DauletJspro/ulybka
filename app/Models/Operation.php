@@ -35,11 +35,18 @@ class Operation extends Model
         $operation->save();
     }
 
-    public static function recordReinvestment($user_id, $number)
+    public static function recordReinvestment($user_id, $number, $isVip)
     {
-        $structureBody = StructureBody::where(['binary_structure_id' => BinaryStructure::FIRST_STRUCTURE])
-            ->where(['number' => $number])
-            ->first();
+        if ($isVip) {
+            $structureBody = VipStructureBody::where(['binary_structure_id' => BinaryStructure::SIXTH_STRUCTURE])
+                ->where(['number' => $number])
+                ->first();
+        } else {
+            $structureBody = StructureBody::where(['binary_structure_id' => BinaryStructure::FIRST_STRUCTURE])
+                ->where(['number' => $number])
+                ->first();
+        }
+
         $data = [
             'author_id' => null,
             'recipient_id' => $user_id,
@@ -89,5 +96,19 @@ class Operation extends Model
         self::recordOperation($data);
         $user->status_id = $packet->packet_status_id;
         $user->save();
+    }
+
+    public static function recordSendMoneyToPayee($authorId, $recipientId, $money)
+    {
+        $comment = sprintf('Кураторский бонус в размере %s (%s)', $money, $money * Currency::usdToKzt());
+        $data = [
+            'author_id' => $authorId,
+            'recipient_id' => $recipientId,
+            'money' => $money,
+            'operation_id' => 1,
+            'operation_type_id' => 40,
+            'comment' => $comment,
+        ];
+        self::recordOperation($data);
     }
 }

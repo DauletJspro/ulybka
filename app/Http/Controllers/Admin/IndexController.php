@@ -24,7 +24,8 @@ class IndexController extends Controller
         $this->middleware('profile', ['only' => ['index', 'callFriend']]);
     }
 
-    public function test(){
+    public function test()
+    {
         return view('admin.test.test');
     }
 

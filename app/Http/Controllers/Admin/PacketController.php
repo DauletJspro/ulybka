@@ -161,18 +161,6 @@ class PacketController extends Controller
             return response()->json($result);
         }
 
-        if ($packet->condition_minimum_status_id > 0) {
-
-            $status = UserStatus::where('user_status_id', Auth::user()->status_id)->first();
-            $status_condition = UserStatus::where('user_status_id', $packet->condition_minimum_status_id)->first();
-
-            if ($status == null || $status->sort_num < $status_condition->sort_num) {
-                $result['message'] = 'У вас должно быть статус - ' . $status_condition->user_status_name . " и выше";
-                $result['status'] = false;
-                return response()->json($result);
-            }
-        }
-
         if (in_array($packet->is_upgrade_packet, [1, 3])) {
             $is_check = UserPacket::leftJoin('packet', 'packet.packet_id', '=', 'user_packet.packet_id')
                 ->where('user_id', Auth::user()->user_id)

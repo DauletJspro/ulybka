@@ -28,14 +28,26 @@ class VipStructureBody extends Model
 
     public static function setRootUsersToStructureBody($binaryStructureId, $number)
     {
+
         $tree = [2, 3, 4, 5, 6, 7, 8];
+
         $structureBody = new VipStructureBody();
         $structureBody->binary_structure_id = $binaryStructureId;
-        $structureBody->tree_representation = json_encode($tree);
         $structureBody->number = $number;
+        $structureBody->tree_representation = json_encode($tree);
         $structureBody->save();
 
-        return $structureBody;
+        $structureName = BinaryStructure::where(['id' => $binaryStructureId])->first()->type;
+
+        $redis = new Redis();
+
+        $redis_key = $structureName . ':' . $number;
+        foreach ($tree as $key => $item) {
+            $redis::zAdd(($redis_key), $item, $key);
+        }
+
+        $tree = ($redis::zRange($redis_key, 0, -1, 'WITHSCORES'));
+        return $tree;
 
     }
 

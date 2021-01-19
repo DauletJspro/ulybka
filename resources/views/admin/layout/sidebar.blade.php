@@ -238,26 +238,26 @@ $binary_structures = \App\Models\BinaryStructure::all();
             @endforeach
         </ul>
     </li>
-{{--    <li class="treeview">--}}
-{{--        <a href="#">--}}
-{{--            <i class="fa fa-sitemap"></i>--}}
-{{--            <?php $user_packet_notice = \App\Models\UserRequest::where('is_accept', '0')->count();?>--}}
-{{--            <span>Матричная структура VIP</span> <i class="fa fa-angle-left pull-right"></i>--}}
-{{--            <span class="label label-primary pull-right"></span>--}}
-{{--        </a>--}}
-{{--        <ul class="treeview-menu">--}}
-{{--            @foreach($binary_structures as $key => $item)--}}
-{{--                @if($item->id >= \App\Models\BinaryStructure::SIXTH_STRUCTURE)--}}
-{{--                    <li class="treeview">--}}
-{{--                        <a href="{{'/admin/binary_structure/show?structure_id=' . $item->id}}">--}}
-{{--                            <i class="fa fa-sitemap"></i>--}}
-{{--                            <span>{{$item->name_ru}}</span>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                @endif--}}
-{{--            @endforeach--}}
-{{--        </ul>--}}
-{{--    </li>--}}
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-sitemap"></i>
+            <?php $user_packet_notice = \App\Models\UserRequest::where('is_accept', '0')->count();?>
+            <span>Матричная структура VIP</span> <i class="fa fa-angle-left pull-right"></i>
+            <span class="label label-primary pull-right"></span>
+        </a>
+        <ul class="treeview-menu">
+            @foreach($binary_structures as $key => $item)
+                @if($item->id >= \App\Models\BinaryStructure::SIXTH_STRUCTURE)
+                    <li class="treeview">
+                        <a href="{{'/admin/binary_structure/show?structure_id=' . $item->id}}">
+                            <i class="fa fa-sitemap"></i>
+                            <span>{{$item->name_ru}}</span>
+                        </a>
+                    </li>
+                @endif
+            @endforeach
+        </ul>
+    </li>
     <li class="treeview">
         <a href="/admin/shop">
             <i class="fa fa-shopping-cart"></i>

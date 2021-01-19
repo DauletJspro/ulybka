@@ -94,7 +94,7 @@ class TreeImplementation extends Model
             $number = $number + 1;
             $resultFromInvestment = $this->firstStructure($result['parentId'], $number, $isVip);
             if ($resultFromInvestment['success']) {
-                Operation::recordReinvestment($result['parentId'], $number);
+                Operation::recordReinvestment($result['parentId'], $number, $isVip);
             }
         }
 
@@ -121,7 +121,7 @@ class TreeImplementation extends Model
             $number = $number + 1;
             $resultFromInvestment = $this->firstStructure($result['parentId'], $number, $isVip);
             if ($resultFromInvestment['success']) {
-                Operation::recordReinvestment($result['parentId'], $number);
+                Operation::recordReinvestment($result['parentId'], $number, $isVip);
             }
         }
 
@@ -176,7 +176,12 @@ class TreeImplementation extends Model
 
     public function setUserToTree($binaryStructureId, $number, $user_id)
     {
-        $structureBody = (new StructureBody)->getStructureBody($binaryStructureId, $number);
+        if ($binaryStructureId <= BinaryStructure::FIFTH_STRUCTURE) {
+            $structureBody = (new StructureBody)->getStructureBody($binaryStructureId, $number);
+        } else {
+            $structureBody = (new VipStructureBody)->getStructureBody($binaryStructureId, $number);
+        }
+
 
         $redis = new Redis();
         $structureName = BinaryStructure::where(['id' => $binaryStructureId])->first()->type;

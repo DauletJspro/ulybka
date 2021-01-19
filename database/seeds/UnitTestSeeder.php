@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\BinaryStructure;
 use App\Models\VipStructureBody;
 use Illuminate\Database\Seeder;
 use \Illuminate\Support\Facades\Redis;
@@ -13,18 +14,12 @@ class UnitTestSeeder extends Seeder
      */
     public function run()
     {
-
         try {
-            $binaryStructureBody = \App\Models\StructureBody::where('binary_structure_id', 1)
-                ->where('number', 1)
-                ->first();
+            $users = \App\Models\Users::where('user_id', '<=', 50)->get();
+            foreach ($users as $user) {
+                app(\App\Models\TreeImplementation::class)->firstStructure($user->user_id, 1, false);
+            }
 
-            $tree = json_decode($binaryStructureBody->tree_representation);
-
-            var_dump(array_search(221, $tree));
-//            app(\App\Models\TreeImplementation::class)->firstStructure(30, 1);
-//            app(\App\Models\TreeImplementation::class)->firstStructure(31, 1);
-//            app(\App\Models\TreeImplementation::class)->firstStructure(32, 1);
         } catch (Exception $exception) {
             var_dump($exception->getFile() . ' / ' . $exception->getLine() . ' / ' . $exception->getMessage());
         }

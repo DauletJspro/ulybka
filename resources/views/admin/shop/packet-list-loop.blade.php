@@ -8,7 +8,7 @@ use \App\Models\UserPacket;
 
 @foreach($row->packet as $key => $item)
 
-    @if( in_array($item->packet_id,[\App\Models\Packet::FIRST_TABLE]))
+    @if( in_array($item->packet_id,[\App\Models\Packet::FIRST_TABLE, \App\Models\Packet::FIRST_TABLE_VIP]))
 
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
