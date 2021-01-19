@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\TransferFromDBToRedisCommand;
+use App\Console\Commands\TransferFromRedisToDBCommand;
 use App\Models\Fond;
 use App\Models\Operation;
 use App\Models\UserOperation;
@@ -19,7 +20,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        TransferFromDBToRedisCommand::class
+        TransferFromDBToRedisCommand::class,
+        TransferFromRedisToDBCommand::class,
     ];
 
     /**

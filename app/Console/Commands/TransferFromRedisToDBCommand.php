@@ -7,21 +7,21 @@ use App\Models\StructureBody;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 
-class TransferFromDBToRedisCommand extends Command
+class TransferFromRedisToDBCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'transfer:fromDbToRedis';
+    protected $signature = 'transfer:fromRedisToDB';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Transfer from db to Redis';
+    protected $description = 'Transfer from redis to Database';
 
     /**
      * Create a new command instance.
@@ -40,7 +40,6 @@ class TransferFromDBToRedisCommand extends Command
      */
     public function handle()
     {
-
         $structureBody = StructureBody::all();
 
         foreach ($structureBody as $item) {
@@ -54,22 +53,17 @@ class TransferFromDBToRedisCommand extends Command
         $structureName = BinaryStructure::where(['id' => $binaryStructureId])->first()->type;
         $redis_key = $structureName . ':' . $number;
 
-        $first_structure_first_number = StructureBody::where(['binary_structure_id' => $binaryStructureId])
-            ->where(['number' => $number])->first();
+        $tree = $redis::zRange($redis_key, 0, -1, 'WITHSCORES');
 
-        $tree = (array)json_decode($first_structure_first_number->tree_representation);
 
-        $tree = array_map(
-            function ($value) {
-                return (int)$value;
-            },
-            $tree
-        );
+        if (isset($tree)) {
+            $structureBody = StructureBody::where(['binary_structure_id' => $binaryStructureId])
+                ->where(['number' => $number])->first();
 
-        foreach ($tree as $key => $item) {
-            if ($item != 0) {
-                $redis::zAdd(($redis_key), $item, $key);
-            }
+            $structureBody->tree_representation = json_encode($tree);
+            $structureBody->save();
         }
+
+
     }
 }
