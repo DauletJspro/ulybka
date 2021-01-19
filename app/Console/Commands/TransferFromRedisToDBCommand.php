@@ -55,7 +55,6 @@ class TransferFromRedisToDBCommand extends Command
 
         $tree = $redis::zRange($redis_key, 0, -1, 'WITHSCORES');
 
-
         if (isset($tree)) {
             $structureBody = StructureBody::where(['binary_structure_id' => $binaryStructureId])
                 ->where(['number' => $number])->first();
@@ -63,7 +62,5 @@ class TransferFromRedisToDBCommand extends Command
             $structureBody->tree_representation = json_encode($tree);
             $structureBody->save();
         }
-
-
     }
 }

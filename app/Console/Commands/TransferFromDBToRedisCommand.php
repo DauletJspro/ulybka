@@ -59,16 +59,9 @@ class TransferFromDBToRedisCommand extends Command
 
         $tree = (array)json_decode($first_structure_first_number->tree_representation);
 
-        $tree = array_map(
-            function ($value) {
-                return (int)$value;
-            },
-            $tree
-        );
-
         foreach ($tree as $key => $item) {
             if ($item != 0) {
-                $redis::zAdd(($redis_key), $item, $key);
+                $redis::zAdd(($redis_key), (int) $item, $key);
             }
         }
     }
