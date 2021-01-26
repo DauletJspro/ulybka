@@ -12,16 +12,28 @@ $packet_price = $packet->packet_price * \App\Models\Currency::usdToKzt();
 $is_show_last_4 = true;
 $padding_left = 0;
 $padding_left_2 = 0;
-if ($structure_id == 2) {
+if ($structure_id == \App\Models\BinaryStructure::SECOND_STRUCTURE) {
     $is_show_last_4 = false;
     $padding_left = 150;
     $padding_left_2 = 100;
 }
-if ($structure_id == 4) {
+if ($structure_id == \App\Models\BinaryStructure::FOURTH_STRUCTURE) {
     $padding_left = 150;
     $padding_left_2 = 100;
     $is_show_last_4 = false;
 }
+
+if ($structure_id == \App\Models\BinaryStructure::SEVENTH_STRUCTURE) {
+    $padding_left = 150;
+    $padding_left_2 = 100;
+    $is_show_last_4 = false;
+}
+if ($structure_id == \App\Models\BinaryStructure::NINTH_STRUCTURE) {
+    $padding_left = 150;
+    $padding_left_2 = 100;
+    $is_show_last_4 = false;
+}
+
 
 ?>
 @extends('admin.layout.layout')
@@ -83,12 +95,12 @@ if ($structure_id == 4) {
                         </button>
                     </div>
                 </div>
-{{--                <div class=" col-md-5 col-sm-5 col-xs-5">--}}
-{{--                    <a href="{{route('binary_structure.replace_form')}}" style="margin-top: 10px;"--}}
-{{--                       class="btn btn-success">--}}
-{{--                        Переместить пользователя--}}
-{{--                    </a>--}}
-{{--                </div>--}}
+                {{--                <div class=" col-md-5 col-sm-5 col-xs-5">--}}
+                {{--                    <a href="{{route('binary_structure.replace_form')}}" style="margin-top: 10px;"--}}
+                {{--                       class="btn btn-success">--}}
+                {{--                        Переместить пользователя--}}
+                {{--                    </a>--}}
+                {{--                </div>--}}
             </div>
         </div>
         <h1 style="float: left;padding-left: 2rem;padding-top: 1rem;">
@@ -617,7 +629,7 @@ if ($structure_id == 4) {
 
     @media only screen and (max-width: 452px) {
         .tree_li {
-            padding-left: {{0 + $padding_left_2}}             !important;
+            padding-left: {{0 + $padding_left_2}}              !important;
         }
 
         .thumbnail {
