@@ -253,14 +253,17 @@ class StructureBody extends Model
                 ]);
 
                 // send money to payee
-                $moneyToSendPayee = Users::whereIn('user_id', [2000, 2001, 2002])->get();
-                foreach ($moneyToSendPayee as $user) {
-                    $money = $packet_price * (7 / 100);
-                    $user->user_money = $user->user_money + $money;
-                    if ($user->save()) {
-                        Operation::recordSendMoneyToPayee($childId, $user->user_id, $money);
+                if ($structureBody->binary_structure_id == BinaryStructure::FIRST_STRUCTURE) {
+                    $moneyToSendPayee = Users::whereIn('user_id', [2000, 2001, 2002])->get();
+                    foreach ($moneyToSendPayee as $user) {
+                        $money = $packet_price * (7 / 100);
+                        $user->user_money = $user->user_money + $money;
+                        if ($user->save()) {
+                            Operation::recordSendMoneyToPayee($childId, $user->user_id, $money);
+                        }
                     }
                 }
+
 
                 Operation::recordSendReward($childId, $parentId, $bonus, $structureBody);
                 DB::commit();

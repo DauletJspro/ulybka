@@ -140,6 +140,9 @@ class TreeImplementation extends Model
             return false;
         }
         $structureBody = $result['data'];
+        $tree = $result['tree'];
+        $this->checkParent($user_id, $structureBody, $tree);
+
 
         return $structureBody;
     }
