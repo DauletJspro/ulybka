@@ -31,7 +31,7 @@ class AuthController extends Controller
             ->get();
 
         $users_row = Users::orderBy('last_name', 'asc')
-            ->where('user_id' ,'!=',1)
+            ->where('user_id', '!=', 1)
             ->get();
 
         $city_row = City::orderBy('city_name_ru', 'asc')
@@ -111,9 +111,14 @@ class AuthController extends Controller
         }
 
         $user = new Users();
+        $users_row = Users::orderBy('last_name', 'asc')
+            ->where('user_id', '!=', 1)
+            ->get();
+
 
         return view('admin.new_design_auth.register', [
-            'row' => $user
+            'row' => $user,
+            'users_row' => $users_row,
         ]);
     }
 

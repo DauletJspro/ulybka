@@ -30,7 +30,6 @@
     </div>
     <main id="mt-main">
         <section class="mt-contact-banner"
-                 {{--                 style="background-image: url('/new_design/images/sign_in.png'); background-size: contain; background-repeat: no-repeat;"--}}
                  style="background-color: lightgrey" ;
         >
             <div class="container">
@@ -39,8 +38,6 @@
                         <h1>Регистрация</h1>
                         <nav class="breadcrumbs">
                             <ul class="list-unstyled">
-{{--                                <li><a href="index.html">home <i class="fa fa-angle-right"></i></a></li>--}}
-{{--                                <li>register</li>--}}
                             </ul>
                         </nav>
                     </div>
@@ -80,7 +77,7 @@
                                                             class="form-control selectpicker input"
                                                             data-live-search="true">
                                                         <option value="">Выберите пригласителя</option>
-                                                        @foreach($recommend_row as $item)
+                                                        @foreach($users_row as $item)
                                                             <option @if($row->recommend_user_id == $item->user_id || (isset($_GET['id']) && $_GET['id'] == $item->user_id) ) {{'selected'}} @endif value="{{$item->user_id}}">
                                                                 {{sprintf('%s (%s)',$item['login'], $item['last_name'])}}
                                                             </option>
@@ -98,8 +95,8 @@
                                                        placeholder="Пароль"/>
                                                 <input required type="password" value="{{$row->confirm_password}}"
                                                        name="confirm_password" class="form-control input"
-                                                       placeholder="Повторите пароль"/>                                                
-                                            </div>                                            
+                                                       placeholder="Повторите пароль"/>
+                                            </div>
                                         </div>
                                         <br>
                                         <button type="submit" class="btn btn-danger btn-type1">Зарегистрироваться
@@ -111,17 +108,7 @@
                                                     style="font-weight: bold; text-decoration: underline; color: black;"
                                                     href="/login">«Войти»</a>
                                         </div>
-                                        {{-- <div class="form-group main-page-div" style="text-align: center">
-                                            <a style="font-weight: bold; text-decoration: underline; color: black;"
-                                               href="/">Главная страница</a>
-                                        </div> --}}
                                     </header>
-                                    {{-- <ul class="mt-socialicons">
-                                        <li class="mt-facebook"><a href="#"><i class="fa fa-facebook-f"></i></a></li>
-                                        <li style="background-color: lightgreen;"><a href="#"><i
-                                                        class="fa fa-whatsapp"></i></a></li>
-                                        <li class="mt-youtube"><a href="#"><i class="fa fa-youtube-play"></i></a></li>
-                                    </ul> --}}
                                 </div>
 
                             </div>
