@@ -25,28 +25,6 @@ class AuthController extends Controller
         if (version_compare(PHP_VERSION, '7.2.0', '>=')) {
             error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
         }
-        $country_row = Country::orderBy('sort_num', 'asc')
-            ->orderBy('country_name_ru', 'asc')
-            ->where('is_show', 1)
-            ->get();
-
-        $users_row = Users::orderBy('last_name', 'asc')
-            ->where('user_id', '!=', 1)
-            ->get();
-
-        $city_row = City::orderBy('city_name_ru', 'asc')
-            ->where('is_show', 1)
-            ->where('country_id', 1)
-            ->get();
-
-        $speaker_row = Users::orderBy('last_name', 'asc')->where('is_speaker', 1)->get();
-        $director_row = Users::orderBy('last_name', 'asc')->where('is_director_office', 1)->get();
-
-        View::share('country_row', $country_row);
-        View::share('recommend_row', $users_row);
-        View::share('city_row', $city_row);
-        View::share('speaker_row', $speaker_row);
-        View::share('office_row', $director_row);
     }
 
     public function login(Request $request)
@@ -172,28 +150,6 @@ class AuthController extends Controller
         $user->is_activated = 1;
         $user->recommend_user_id = is_numeric($request->recommend_user_id) ? $request->recommend_user_id : null;
         $user->inviter_user_id = is_numeric($request->inviter_user_id) ? $request->inviter_user_id : null;
-        // $user->speaker_id = is_numeric($request->speaker_id)?$request->speaker_id:null;
-        // $user->office_director_id = is_numeric($request->office_director_id)?$request->office_director_id:null;
-        // if (is_numeric($request->recommend_user_id)) {
-        //     $recommend_user = Users::where('user_id', $request->recommend_user_id)->first();
-        //     if ($recommend_user) {
-        //         $recommend_user_count = Users::where('recommend_user_id', $request->recommend_user_id)->get();
-        //         if (count($recommend_user_count) >= 2) {
-        //             return view('admin.new_design_auth.register', [
-        //                 'title' => '',
-        //                 'row' => (object)$request->all(),
-        //                 'error' => 'Спонсор уже имеет более 2 участников 1 уровня'
-        //             ]); 
-        //         }
-        //     }
-        //     else {
-        //         return view('admin.new_design_auth.register', [
-        //             'title' => '',
-        //             'row' => (object)$request->all(),
-        //             'error' => 'Спонсор уже имеет более 2 участников 1 уровня'
-        //         ]);
-        //     }
-        // }
         $hash_email = md5(uniqid(time(), true));
         $user->hash_email = $hash_email;
         $user->activated_date = date("Y-m-d");
