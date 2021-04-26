@@ -99,8 +99,8 @@
                                             </div>
                                         </div>
                                         <br>
-                                        <button type="submit" class="btn btn-danger btn-type1">Зарегистрироваться
-                                        </button>
+{{--                                        <button type="submit" class="btn btn-danger btn-type1">Зарегистрироваться--}}
+{{--                                        </button>--}}
                                     </form>
                                     <header>
                                         <div class="form-group text-center already-registered-div">

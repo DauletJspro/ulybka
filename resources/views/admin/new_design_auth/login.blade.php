@@ -61,7 +61,7 @@
                                        placeholder="Пароль"/>
                                 <br>
                                 <br>
-                                <button type="submit" class="btn btn-danger btn-type1">Войти</button>
+{{--                                <button type="submit" class="btn btn-danger btn-type1">Войти</button>--}}
                             </form>
                             <header>
                                 <div class="form-group already-registered-div">
